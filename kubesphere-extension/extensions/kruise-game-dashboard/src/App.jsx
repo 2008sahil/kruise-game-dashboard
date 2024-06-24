@@ -6,6 +6,7 @@ import {Group} from '@kubed/icons';
 import {CssBaseline, KubedConfigProvider} from '@kubed/components';
 import {useEffect} from 'react';
 // import "@kube-design/components/esm/styles/index.css";
+import "@kube-design/components/esm/styles/index.scss";
 
 const PageSide = styled.div`
   position: fixed;
