@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState , useCallback} from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Pagination, Select } from "@kube-design/components";
@@ -12,30 +12,57 @@ function Projects() {
 
   useEffect(() => {
     const fetchConfig = async () => {
-        try {
-          setIsLoading(true);
+      setIsLoading(true)
+    try {
+      const storedConfig = localStorage.getItem('config');
+      if (storedConfig) {
+        const configData = JSON.parse(storedConfig);
+        setConfig(configData);       
+       
+      } 
+      else{
         const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
         setConfig(response.data);
-      } catch (error) {
-        setIsLoading(false);
-        console.error('Error fetching config:', error);
+        // Save config data to local storage
+        const configData = {
+          projectLabel: response.data.projectLabel,
+          deployUnits: JSON.stringify(response.data.deployUnits)
+        };
+        localStorage.setItem('config', JSON.stringify(configData));
+        
       }
+    } catch (error) {
+        console.error('Error fetching config:', error);
+    }
+    setIsLoading(false)
     };
     fetchConfig();
   }, []);
 
+
   useEffect(() => {
     const fetchProjectsData = async () => {
       if (!config) return;
-      const projectLabelKey = config.Projectlabel;
-      const deployUnits = JSON.parse(config.deployunits);
-      let projects = {};
+      const projectLabelKey = config.projectLabel;
+      const deployUnits = JSON.parse(config.deployUnits);
 
-      for (let clusterId of deployUnits) {
+      const fetchClusterData = async (clusterId) => {
         try {
           const response = await axios.get(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/gameserversets`);
-          const gameServerSets = response.items;
+          return response.items;
+        } catch (error) {
+          console.error(`Error fetching data for cluster ${clusterId}:`, error);
+          return [];
+        }
+      };
 
+      try {
+        setIsLoading(true);
+        const results = await Promise.all(deployUnits.map(clusterId => fetchClusterData(clusterId)));
+
+        const projects = {};
+        results.forEach((gameServerSets, index) => {
+          const clusterId = deployUnits[index];
           gameServerSets.forEach(gss => {
             if (gss.metadata.labels && gss.metadata.labels[projectLabelKey]) {
               const projectName = gss.metadata.labels[projectLabelKey];
@@ -54,24 +81,26 @@ function Projects() {
               }
             }
           });
-        } catch (error) {
-          console.error(`Error fetching data for cluster ${clusterId}:`, error);
-        }
-      }
+        });
 
-      const projectsArray = Object.values(projects);
-      setallprojectData(projectsArray)
-      setProjectsData(projectsArray.slice(0, pagination.limit));
-        
-      setPagination(prevState => ({
-        ...prevState,
-        total: projectsArray.length,
-      }));
-      setIsLoading(false);
+        const projectsArray = Object.values(projects);
+        setallprojectData(projectsArray);
+        setProjectsData(projectsArray.slice(0, pagination.limit));
+        setPagination(prevState => ({
+          ...prevState,
+          total: projectsArray.length,
+        }));
+      } finally {
+        setIsLoading(false);
+      }
     };
 
-    fetchProjectsData();
+
+    if (config) {
+      fetchProjectsData();
+    }
   }, [config]);
+
 
   const handleTableChange = (filters, Sorter) => {
       const sortedData = sortData(allprojectData, Sorter.field, Sorter.order);

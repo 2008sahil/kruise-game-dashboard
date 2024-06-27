@@ -15,14 +15,29 @@ function DeployUnitList(props) {
 
   useEffect(() => {
     const fetchConfig = async () => {
-      try {
-        setIsLoading(true);
+      setIsLoading(true)
+    try {
+      const storedConfig = localStorage.getItem('config');
+      if (storedConfig) {
+        const configData = JSON.parse(storedConfig);
+        setConfig(configData);       
+       
+      } 
+      else{
         const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
         setConfig(response.data);
-      } catch (error) {
-        setIsLoading(false);
-        console.error('Error fetching config:', error);
+        // Save config data to local storage
+        const configData = {
+          projectLabel: response.data.projectLabel,
+          deployUnits: JSON.stringify(response.data.deployUnits)
+        };
+        localStorage.setItem('config', JSON.stringify(configData));
+        
       }
+    } catch (error) {
+        console.error('Error fetching config:', error);
+        setIsLoading(false)
+    }
     };
     fetchConfig();
   }, []);
@@ -30,8 +45,8 @@ function DeployUnitList(props) {
   useEffect(() => {
     const fetchDeployUnitsData = async () => {
       if (!config) return;
-      const projectLabelKey = config.Projectlabel;
-      const deployUnits = JSON.parse(config.deployunits);
+      const projectLabelKey = config.projectLabel;
+      const deployUnits = JSON.parse(config.deployUnits);
       const fetchPromises = deployUnits.map(clusterId => fetchClusterData(clusterId, projectLabelKey));
 
       try {

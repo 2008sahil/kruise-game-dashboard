@@ -61,9 +61,25 @@ function GlobalConfiguration(props) {
   const fetchConfig = async () => {
     setloading(true)
     try {
-      const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
-      setSelectedValues(JSON.parse(response.data.deployunits))
-      setinputvalue(response.data.Projectlabel)
+      const storedConfig = localStorage.getItem('config');
+      if (storedConfig) {
+        const configData = JSON.parse(storedConfig);
+        setSelectedValues(JSON.parse(configData.deployUnits));
+        setinputvalue(configData.projectLabel);
+       
+      } 
+      else{
+        const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
+        setSelectedValues(JSON.parse(response.data.deployUnits))
+        setinputvalue(response.data.projectLabel)
+        // Save config data to local storage
+        const configData = {
+          projectLabel: inputvalue,
+        deployUnits: JSON.stringify(selectedValues)
+        };
+        localStorage.setItem('config', JSON.stringify(configData));
+        
+      }
       setconfig(true)
     } catch (error) {
     }
@@ -87,8 +103,8 @@ function GlobalConfiguration(props) {
           namespace: 'default', // Ensure this matches the namespace in the URL
         },
         data: {
-          'Projectlabel': inputvalue, // Key-value pairs for the ConfigMap data
-          'deployunits': JSON.stringify(selectedValues) // Converting array to string
+          'projectLabel': inputvalue, // Key-value pairs for the ConfigMap data
+          'deployUnits': JSON.stringify(selectedValues) // Converting array to string
         },
 
       };
@@ -101,6 +117,13 @@ function GlobalConfiguration(props) {
         Notify.success('Dashboard Config Created')
 
       }
+      // Save config data to local storage
+      const configData = {
+        projectLabel: inputvalue,
+        deployUnits: JSON.stringify(selectedValues)
+      };
+      localStorage.setItem('config', JSON.stringify(configData));
+    
     } catch (error) {
       console.error('Error creating ConfigMap:', error);
     }
@@ -125,11 +148,11 @@ function GlobalConfiguration(props) {
       
       <StyledText variant="h3">Deploy Units</StyledText>
       <StyledSelect 
-        multi 
-        searchable
         name="select-multi" 
         options={clusterOptions} 
         onChange={handleChange} 
+        multi 
+        searchable
         value={selectedValues} 
         placeholder="Select Deploy Units"
         disabled={loading}
