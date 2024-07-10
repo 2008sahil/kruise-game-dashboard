@@ -32,7 +32,7 @@ function GameServerSetList(props) {
     };
 
     function handleFilterInputChange() {
-        console.log("input change")
+        // console.log("input change")
     }
 
     function formatServerData(data) {
@@ -200,7 +200,6 @@ function GameServerSetList(props) {
     ]
 
     const format = useCallback(item => {
-        console.log("item is ",item)
         let row = {
             id: item.metadata.uid,
             name: item.metadata.name,

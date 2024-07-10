@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Select, Button,Notify,Loading } from "@kube-design/components";
+import { Select, Button,Notify } from "@kube-design/components";
 import { Text, Input, Container } from '@kubed/components';
 import styled from 'styled-components';
 import axios from "axios";
@@ -30,13 +30,12 @@ const StyledOuterContainer = styled.div`
 `;
 
 function GlobalConfiguration(props) {
+
   const [selectedValues, setSelectedValues] = useState([]);
   const [inputvalue, setinputvalue] = useState("");
   const [clusterOptions, setClusterOptions] = useState([]);
   const [config,setconfig]= useState(false)
   const [loading,setloading]=useState(false)
-
-  
 
   const handleChange = (Value) => {
     setSelectedValues(Value);
@@ -74,11 +73,10 @@ function GlobalConfiguration(props) {
         setinputvalue(response.data.projectLabel)
         // Save config data to local storage
         const configData = {
-          projectLabel: inputvalue,
-        deployUnits: JSON.stringify(selectedValues)
+          projectLabel: (response.data.projectLabel),
+        deployUnits: (response.data.deployUnits)
         };
         localStorage.setItem('config', JSON.stringify(configData));
-        
       }
       setconfig(true)
     } catch (error) {
@@ -100,11 +98,11 @@ function GlobalConfiguration(props) {
         kind: 'ConfigMap',
         metadata: {
           name: 'configset',
-          namespace: 'default', // Ensure this matches the namespace in the URL
+          namespace: 'default', 
         },
         data: {
-          'projectLabel': inputvalue, // Key-value pairs for the ConfigMap data
-          'deployUnits': JSON.stringify(selectedValues) // Converting array to string
+          'projectLabel': inputvalue, 
+          'deployUnits': JSON.stringify(selectedValues) 
         },
 
       };
@@ -128,25 +126,21 @@ function GlobalConfiguration(props) {
       console.error('Error creating ConfigMap:', error);
     }
     setloading(false)
-
-
   }
 
   useEffect(async ()=>{
     fetchClusters();
     fetchConfig();
-
 },[])
-
 
   return (
     
     <StyledOuterContainer>
     <Container>
-      <StyledText variant="h3">Project Label Key</StyledText>
+      <StyledText variant="h3">{t("Project Label Key")}</StyledText>
       <StyledInput value ={inputvalue} onChange={handleInputChange} placeholder="Select Project label" disabled={loading} />
       
-      <StyledText variant="h3">Deploy Units</StyledText>
+      <StyledText variant="h3">{t("Deploy Units")}</StyledText>
       <StyledSelect 
         name="select-multi" 
         options={clusterOptions} 
@@ -154,12 +148,12 @@ function GlobalConfiguration(props) {
         multi 
         searchable
         value={selectedValues} 
-        placeholder="Select Deploy Units"
+        placeholder={('name')}
         disabled={loading}
       />
       
       <ButtonWrapper>
-        <Button type="primary" loading={loading} onClick={handleClick}>Save Config</Button>
+        <Button type="primary" loading={loading} onClick={handleClick}>{t("Save Config")}</Button>
       </ButtonWrapper>
     </Container>
     </StyledOuterContainer>

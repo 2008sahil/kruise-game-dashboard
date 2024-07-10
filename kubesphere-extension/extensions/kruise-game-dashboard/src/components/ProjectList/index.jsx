@@ -1,48 +1,47 @@
-import React, { useEffect, useState , useCallback} from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Pagination, Select } from "@kube-design/components";
+import { Banner } from '@kubed/components';
+import { Icon } from "@ks-console/shared";
 
 function Projects() {
+
   const [config, setConfig] = useState(null);
   const [projectsData, setProjectsData] = useState([]);
-  const [allprojectData,setallprojectData]=useState([]);
+  const [allprojectData, setallprojectData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, total: 0, limit: 5 });
 
   useEffect(() => {
     const fetchConfig = async () => {
       setIsLoading(true)
-    try {
-      const storedConfig = localStorage.getItem('config');
-      if (storedConfig) {
-        const configData = JSON.parse(storedConfig);
-        setConfig(configData);       
-       
-      } 
-      else{
-        const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
-        setConfig(response.data);
-        // Save config data to local storage
-        const configData = {
-          projectLabel: response.data.projectLabel,
-          deployUnits: JSON.stringify(response.data.deployUnits)
-        };
-        localStorage.setItem('config', JSON.stringify(configData));
-        
-      }
-    } catch (error) {
+      try {
+        const storedConfig = localStorage.getItem('config');
+        if (storedConfig) {
+          const configData = JSON.parse(storedConfig);
+          setConfig(configData);
+        }
+        else {
+          const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
+          setConfig(response.data);
+          // Save config data to local storage
+          const configData = {
+            projectLabel: response.data.projectLabel,
+            deployUnits: (response.data.deployUnits)
+          };
+          localStorage.setItem('config', JSON.stringify(configData));
+        }
+      } catch (error) {
         console.error('Error fetching config:', error);
-    }
-    setIsLoading(false)
+      }
+      setIsLoading(false)
     };
     fetchConfig();
   }, []);
 
-
   useEffect(() => {
     const fetchProjectsData = async () => {
-      if (!config) return;
       const projectLabelKey = config.projectLabel;
       const deployUnits = JSON.parse(config.deployUnits);
 
@@ -59,7 +58,6 @@ function Projects() {
       try {
         setIsLoading(true);
         const results = await Promise.all(deployUnits.map(clusterId => fetchClusterData(clusterId)));
-
         const projects = {};
         results.forEach((gameServerSets, index) => {
           const clusterId = deployUnits[index];
@@ -95,18 +93,15 @@ function Projects() {
       }
     };
 
-
     if (config) {
       fetchProjectsData();
     }
   }, [config]);
 
-
   const handleTableChange = (filters, Sorter) => {
-      const sortedData = sortData(allprojectData, Sorter.field, Sorter.order);
-      setallprojectData(sortedData)
-      setProjectsData(sortedData.slice((pagination.page - 1) * pagination.limit, pagination.page * pagination.limit))
-
+    const sortedData = sortData(allprojectData, Sorter.field, Sorter.order);
+    setallprojectData(sortedData)
+    setProjectsData(sortedData.slice((pagination.page - 1) * pagination.limit, pagination.page * pagination.limit))
   };
 
   const sortData = (data, field, order) => {
@@ -145,22 +140,22 @@ function Projects() {
 
   const columns = [
     {
-      title: 'Project Name',
+      title: t('projectName'),
       dataIndex: 'projectName',
-      render: (value) => <Link to={`/kruise-game-dashboard/projects/${value}`}>{value}</Link>,
+      render: (value,record) => {return <Link to={`/kruise-game-dashboard/projects/${value}`}>{value}</Link>},
     },
     {
-      title: 'Total GameServerSets',
+      title: t('gameServerSetCount'),
       dataIndex: 'gameServerSetCount',
       sorter: true,
     },
     {
-      title: 'Total GameServers',
+      title: t('gameServerCount'),
       dataIndex: 'gameServerCount',
       sorter: true,
     },
     {
-      title: 'Deploy Units',
+      title: t('deployUnits'),
       dataIndex: 'deployUnits',
       render: (deployUnits) => deployUnits.join(', '),
     },
@@ -184,6 +179,12 @@ function Projects() {
 
   return (
     <div style={{ backgroundColor: "white", borderRadius: "15px", padding: "10px" }}>
+      <Banner
+        className="mb12"
+        icon={<Icon name="appcenter" size={40} />}
+        title={t("Projectslist")}
+        description={t("Projectslist_description")}
+      />
       <Table
         rowKey="projectName"
         columns={columns}

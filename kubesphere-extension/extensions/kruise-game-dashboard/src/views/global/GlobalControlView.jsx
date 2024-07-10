@@ -4,7 +4,10 @@ import {Outlet, useLocation, useNavigate, useParams} from 'react-router-dom';
 import {Icon, NavMenu, NavTitle} from '@ks-console/shared';
 import {Group} from '@kubed/icons';
 import {Banner, Col, CssBaseline, KubedConfigProvider, Row} from '@kubed/components';
+import { LocaleProvider } from "@kube-design/components";
+import locales from "../../locales";
 
+window.locale = LocaleProvider.locale;
 
 const PageSide = styled.div`
   position: fixed;
@@ -55,10 +58,15 @@ export default function GlobalControlView() {
             ],
         },
     ];
+    const getCookie = (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    };
 
     useEffect(() => {
         // add default location redirect to overview
-        console.log(location.p)
         if (location.pathname === prefix) {
             navigate(location.pathname + '/overview', {replace: true});
         }
@@ -66,6 +74,7 @@ export default function GlobalControlView() {
 
     return (
         <>
+        <LocaleProvider locales={locales} currentLocale={getCookie("lang")} >
             <KubedConfigProvider>
                 <CssBaseline/>
                 <PageSide>
@@ -80,6 +89,7 @@ export default function GlobalControlView() {
                     <Outlet/>
                 </PageMain>
             </KubedConfigProvider>
+        </LocaleProvider>
         </>
     );
 }

@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Pagination, Select } from "@kube-design/components";
+import { Banner } from '@kubed/components';
+import { Icon } from "@ks-console/shared";
 
 function DeployUnitList(props) {
+
   const [config, setConfig] = useState(null);
-  const [deployUnitsData, setDeployUnitsData] = useState([]);
-  const [allDeployUnitsData, setAllDeployUnitsData] = useState([]);
+  const [DeployUnitsData, setDeployUnitsData] = useState([]);
+  const [AllDeployUnitsData, setAllDeployUnitsData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, total: 0, limit: 5 });
-
-
-  let AllDeployUnitsData = [{"index":1,DeployUnit:"Project-A",gameServerSetCount:2,gameServerCount:3,projects:["sahil ,","gupta ,","kamina ,","kutta","harami"]},{"index":2,DeployUnit:"Project-A",gameServerSetCount:4,gameServerCount:7,projects:["sahil","gupta","kamina","kutta","harami"]},{"index":3,DeployUnit:"Project-A",gameServerSetCount:6,gameServerCount:4,projects:["sahil","gupta","kamina","kutta","harami"]},{"index":4,DeployUnit:"Project-A",gameServerSetCount:10,gameServerCount:1,projects:["sahil","gupta","kamina","kutta","harami"]},{"index":5,DeployUnit:"Project-A",gameServerSetCount:11,gameServerCount:5,projects:["sahil","gupta","kamina","kutta","harami"]},{"index":6,DeployUnit:"Project-A",gameServerSetCount:7,gameServerCount:7,projects:["sahil","gupta","kamina","kutta","harami"]},{"index":7,DeployUnit:"Project-A",gameServerSetCount:15,gameServerCount:12,projects:["sahil","gupta","kamina","kutta","harami"]}];
 
   useEffect(() => {
     const fetchConfig = async () => {
@@ -20,8 +20,7 @@ function DeployUnitList(props) {
       const storedConfig = localStorage.getItem('config');
       if (storedConfig) {
         const configData = JSON.parse(storedConfig);
-        setConfig(configData);       
-       
+        setConfig(configData);            
       } 
       else{
         const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
@@ -31,8 +30,7 @@ function DeployUnitList(props) {
           projectLabel: response.data.projectLabel,
           deployUnits: JSON.stringify(response.data.deployUnits)
         };
-        localStorage.setItem('config', JSON.stringify(configData));
-        
+        localStorage.setItem('config', JSON.stringify(configData));        
       }
     } catch (error) {
         console.error('Error fetching config:', error);
@@ -52,11 +50,8 @@ function DeployUnitList(props) {
       try {
         const results = await Promise.all(fetchPromises);
         const allData = results.filter(data => data); // Filter out any undefined values
-        setAllDeployUnitsData(allData);
-        // setAllDeployUnitsData(AllDeployUnitsData)
-        
+        setAllDeployUnitsData(allData);        
         setDeployUnitsData(allData.slice(0, pagination.limit));
-        // setDeployUnitsData(AllDeployUnitsData.slice(0, pagination.limit));
         setPagination(prevState => ({
           ...prevState,
           total: allData.length,
@@ -103,7 +98,7 @@ function DeployUnitList(props) {
   };
 
   const handleTableChange = (e,Sorter ) => {
-    const sortedData = sortData(allDeployUnitsData, Sorter.field, Sorter.order);
+    const sortedData = sortData(AllDeployUnitsData, Sorter.field, Sorter.order);
     setAllDeployUnitsData(sortedData)
     setDeployUnitsData(sortedData.slice((pagination.page - 1) * pagination.limit, pagination.page * pagination.limit));
   };
@@ -130,8 +125,7 @@ function DeployUnitList(props) {
       limit: limit,
       page: 1,
     }));
-    // const sortedData = sortData(allDeployUnitsData, sorter.field, sorter.order);
-    setDeployUnitsData(allDeployUnitsData.slice(0, limit));
+    setDeployUnitsData(AllDeployUnitsData.slice(0, limit));
   };
 
   const handlePageChange = (page) => {
@@ -139,28 +133,27 @@ function DeployUnitList(props) {
       ...prevState,
       page: page,
     }));
-    // const sortedData = sortData(allDeployUnitsData, sorter.field, sorter.order);
-    setDeployUnitsData(allDeployUnitsData.slice((page - 1) * pagination.limit, page * pagination.limit));
+    setDeployUnitsData(AllDeployUnitsData.slice((page - 1) * pagination.limit, page * pagination.limit));
   };
 
   const columns = [
     {
-      title: 'DeployUnit',
+      title: t('deployUnit'),
       dataIndex: 'DeployUnit',
       render: (value) => <Link to={`/clusters/${value}/kruise-game-dashboard`}>{value}</Link>,
     },
     {
-      title: 'gameServerSetCount',
+      title: t('gameServerSetCount'),
       dataIndex: 'gameServerSetCount',
       sorter: true,
     },
     {
-      title: 'gameServerCount',
+      title: t('gameServerCount'),
       dataIndex: 'gameServerCount',
       sorter: true,
     },
     {
-      title: 'Projects',
+      title: t('projects'),
       dataIndex: 'projects',
       render: (projects) => projects || 'No projects',
     },
@@ -184,10 +177,16 @@ function DeployUnitList(props) {
 
   return (
     <div style={{ backgroundColor: "white", borderRadius: "15px", padding: "10px" }}>
+      <Banner
+        className="mb12"
+        icon={<Icon name="appcenter" size={40} />}
+        title={t("deployUnits")}
+        description={t("deployUnits_description")}
+      />
       <Table
         rowKey="DeployUnit"
         columns={columns}
-        dataSource={deployUnitsData}
+        dataSource={DeployUnitsData}
         loading={isLoading}
         pagination={pagination}
         onChange={handleTableChange}

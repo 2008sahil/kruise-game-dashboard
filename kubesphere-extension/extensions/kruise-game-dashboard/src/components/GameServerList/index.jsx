@@ -68,8 +68,6 @@ function GameServerList(props) {
                 }
             }
         );
-
-        console.log("Successfully updated the field: ", response.data);
         setVisible(false)
     };
 
@@ -109,7 +107,7 @@ function GameServerList(props) {
     });
 
     function handleFilterInputChange() {
-        console.log("input change")
+        // console.log("input change")
     }
 
     
@@ -316,6 +314,7 @@ function GameServerList(props) {
     ;
 
     const format = useCallback(item => {
+        console.log("item is ",item)
         let row = {
             id: item.metadata.uid,
             name: item.metadata.name,

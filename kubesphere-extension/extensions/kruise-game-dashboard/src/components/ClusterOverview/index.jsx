@@ -22,7 +22,6 @@ function ClusterOverview(props) {
             });
         axios.get('/clusters/' + clusterId + '/apis/game.kruise.io/v1alpha1/gameservers')
             .then(response => {
-                console.log(response)
                 if (response.items === undefined) {
                     setGameServers(response.data.items)
                 } else {
