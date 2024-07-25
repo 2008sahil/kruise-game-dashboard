@@ -28,7 +28,7 @@ function DeployUnitList(props) {
         // Save config data to local storage
         const configData = {
           projectLabel: response.data.projectLabel,
-          deployUnits: JSON.stringify(response.data.deployUnits)
+          deployUnits: response.data.deployUnits
         };
         localStorage.setItem('config', JSON.stringify(configData));        
       }

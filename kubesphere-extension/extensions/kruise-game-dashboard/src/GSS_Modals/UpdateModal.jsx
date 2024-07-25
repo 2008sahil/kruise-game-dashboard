@@ -103,8 +103,6 @@ export const UpdateModal = ({ visible, onCancel, onOk, resources,setvisible,load
     <div>
       <Modal
         visible={visible}
-        onCancel={onCancel}
-        onOk={handleClick}
         title={title}
         width={500}
         closable={false}

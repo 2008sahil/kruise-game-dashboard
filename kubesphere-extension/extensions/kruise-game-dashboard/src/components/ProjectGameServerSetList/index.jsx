@@ -6,9 +6,9 @@ import {  useParams } from 'react-router-dom';
 import { Avatar, Icon, } from "@ks-console/shared";
 import axios from 'axios';
 import { ToolbarWrapper, ToolbarInner, BatchActions } from './style.ts';
-import { DeleteModal } from '../../Modals/DeleteModal.jsx';
-import { UpdateModal } from '../../Modals/UpdateModal.jsx';
-import { UpdateReplicaModal } from '../../Modals/UpdateReplicaModal.jsx';
+import { DeleteModal } from '../../GSS_Modals/DeleteModal.jsx';
+import { UpdateModal } from '../../GSS_Modals/UpdateModal.jsx';
+import { UpdateReplicaModal } from '../../GSS_Modals/UpdateReplicaModal.jsx';
 
 const PAGINATION_OPTIONS = [5, 10, 50];
 
@@ -253,7 +253,12 @@ const ProjectGameServerSetList = () => {
   };
 
   const handleLimitChange = (limit) => {
-    setPagination(p => ({ ...p, limit }));
+    setPagination(prevState => ({
+      ...prevState,
+      limit: limit,
+      page: 1,
+    }));
+    setData(allData.slice(0, limit))
   };
 
   const showDeleteModal = () => {
@@ -406,7 +411,7 @@ const ProjectGameServerSetList = () => {
 
   return (
     <div style={{ backgroundColor: 'white', padding: '10px' }}>
-      <DeleteModal visible={IsDeleteModalVisible} setvisible={setIsDeleteModalVisible} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources}/>
+      <DeleteModal visible={IsDeleteModalVisible} setvisible={setIsDeleteModalVisible} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources} gss={true}/>
       <UpdateModal visible={IsUpdateModalVisible} setvisible={setIsUpdateModalVisible} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources}/>
       <UpdateReplicaModal visible={IsRelicaModalVisible} setvisible={setIsRelicaModalVisible} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources}/>
       <Banner

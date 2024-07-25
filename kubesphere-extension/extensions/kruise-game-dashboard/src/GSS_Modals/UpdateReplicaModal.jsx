@@ -1,18 +1,22 @@
 import React, { useState } from 'react'
-import { Modal, Input, Text, Container, Button } from '@kubed/components'
-import { Error } from '@kubed/icons'
+import { Modal, InputNumber, Text, Container, Button } from '@kubed/components'
+import { Update } from '@kubed/icons'
 import axios from 'axios';
 
 
-export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,loading }) => {
-
-  const [inputValue, setInputValue] = useState("");
+export const UpdateReplicaModal = ({ visible, onCancel, onOk, resources,setvisible,loading }) => {
+  const [inputValue, setInputValue] = useState(0);
   const resourceNames = resources.map(resource => resource.Name);
 
   const fetchGameServerSets = async () => {
     const fetchClusterData = async (gss,clusterId,ns) => {
       try {
-        await axios.delete(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/namespaces/${ns}/gameserversets/${gss}`)        
+        const patchData = {
+          spec: {
+            replicas:inputValue
+          }
+      };
+        await axios.patch(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/namespaces/${ns}/gameserversets/${gss}`,patchData,{ headers: { 'Content-Type': 'application/merge-patch+json' } })        
       } catch (error) {
         console.error(`Error fetching data for cluster ${clusterId}:`, error);       
       }
@@ -29,20 +33,19 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
     loading(true)
     await fetchGameServerSets();
     setInputValue("")
-    onOk("Deleted");
+    onOk("Updated");
   };
 
   const title = (
     <div style={{ display: 'flex', justifyContent: 'center', gap: "5px" }}>
-      <Error />
-      <Text>{resources.length > 1 ? "Delete Multiple Resources" : "Delete Resource"}</Text>
+      <Update />
+      <Text>{"Update Resource Replicas"}</Text>
     </div>
   )
+  
+  const message = `Enter the Replicas of gamserverset ${resourceNames.join(', ')} to which you want to update.`;
 
-  const message = `Enter the pod names ${resourceNames.join(', ')} to confirm that you understand the risks of this operation.`;
-
-  const handleChange = (e) => {
-    const value = e.target.value;
+  const handleChange = (value) => {
     setInputValue(value);
   };
   
@@ -51,32 +54,30 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
       <Button variant="filled" color="default" onClick={onCancel}>
         Cancel
       </Button>
-      <Button variant="filled" color="error" disabled={`${resourceNames.join(', ')}`===inputValue?false:true} onClick={handleClick}>
+      <Button variant="filled" color="error" onClick={handleClick}>
         OK
       </Button>
+
     </div>
   )
-  
   return (
     <div>
       <Modal
         visible={visible}
-        onCancel={onCancel}
-        onOk={handleClick}
         title={title}
         width={500}
         closable={false}
         footer={footer}
       >
-        <Container style={{ margin: "10px" }}>
+        <Container style={{ margin: "10px"}}>
           <div>
             <Text>
               {message}
             </Text>
           </div>
-          <div style={{ marginTop: "10px" }}>
-            <Input placeholder={`${resourceNames.join(', ')}`} value={inputValue} onChange={handleChange} />
-          </div>
+          <div style={{ marginTop: "10px" ,marginBottom:"5px"}}>
+            <InputNumber width={400} value={inputValue} min={1} onChange={handleChange} step={1} />
+           </div>
         </Container>
       </Modal>
     </div>
