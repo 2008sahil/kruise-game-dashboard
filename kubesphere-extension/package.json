@@ -145,7 +145,7 @@
     "yargs": "^17.0.1"
   },
   "dependencies": {
-    "@ks-console/bootstrap": "^0.0.1",
+    "@ks-console/bootstrap": "^0.0.5",
     "@ks-console/server": "^0.0.1",
     "@ks-console/shared": "^0.0.4",
     "@kube-design/components": "^1.32.0",
