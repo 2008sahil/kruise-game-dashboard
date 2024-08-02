@@ -4,7 +4,6 @@ import { Update } from '@kubed/icons'
 import axios from 'axios';
 import {Select} from '@kube-design/components'
 
-
 export const UpdateModal = ({ visible, onCancel, onOk, resources,setvisible,loading }) => {
 
   const [inputValue, setInputValue] = useState("");

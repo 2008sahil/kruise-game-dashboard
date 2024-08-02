@@ -5,7 +5,7 @@ import { Table, Pagination, Select } from "@kube-design/components";
 import { Banner } from '@kubed/components';
 import { Icon } from "@ks-console/shared";
 
-function Projects() {
+function ProjectList() {
 
   const [config, setConfig] = useState(null);
   const [projectsData, setProjectsData] = useState([]);
@@ -198,4 +198,4 @@ function Projects() {
   );
 }
 
-export default Projects;
+export default ProjectList;

@@ -73,7 +73,6 @@ export default function App() {
     return (
         <>
         <LocaleProvider locales={locales} ignoreWarnings>
-
             <KubedConfigProvider>
                 <CssBaseline/>
                 <PageSide>

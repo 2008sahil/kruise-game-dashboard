@@ -71,7 +71,6 @@ function ProjectDetailView(props) {
     return (
         <>
         <LocaleProvider locales={locales} >
-
             <KubedConfigProvider>
                 <CssBaseline/>
                 <PageSide>

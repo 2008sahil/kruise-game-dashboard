@@ -3,7 +3,6 @@ import { Modal, InputNumber, Text, Container, Button } from '@kubed/components'
 import { Update } from '@kubed/icons'
 import axios from 'axios';
 
-
 export const UpdateReplicaModal = ({ visible, onCancel, onOk, resources,setvisible,loading }) => {
   const [inputValue, setInputValue] = useState(0);
   const resourceNames = resources.map(resource => resource.Name);
@@ -57,7 +56,6 @@ export const UpdateReplicaModal = ({ visible, onCancel, onOk, resources,setvisib
       <Button variant="filled" color="error" onClick={handleClick}>
         OK
       </Button>
-
     </div>
   )
   return (

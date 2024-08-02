@@ -6,8 +6,6 @@ import axios from 'axios';
 export const OpsStateModal = ({visible, onCancel, onOk, resources,setvisible,loading }) => {
     const [fieldValue, setFieldValue] = useState("");
 
-
-
     const handlePatchRequest = async () => {
         const patchData = {
             spec: {
@@ -71,7 +69,6 @@ export const OpsStateModal = ({visible, onCancel, onOk, resources,setvisible,loa
         footer={footer}
         >
             <AutoComplete placeholder="Set opsState..." style={{ width: "100%" }} options={[{ value: "WaitToBeDeleted" },{ value:"None" },{ value: "Allocated" },{ value: "Maintaining" },{ value: "Kill" } ]}  onChange={(data) => setFieldValue(data)}/>
-
         </Modal>
     </div>
   )

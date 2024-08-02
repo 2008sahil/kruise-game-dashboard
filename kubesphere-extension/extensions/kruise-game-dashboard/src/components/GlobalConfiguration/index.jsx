@@ -4,7 +4,6 @@ import { Text, Input, Container } from '@kubed/components';
 import styled from 'styled-components';
 import axios from "axios";
 
-
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: center;
@@ -65,7 +64,6 @@ function GlobalConfiguration(props) {
         const configData = JSON.parse(storedConfig);
         setSelectedValues(JSON.parse(configData.deployUnits));
         setinputvalue(configData.projectLabel);
-       
       } 
       else{
         const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
@@ -104,7 +102,6 @@ function GlobalConfiguration(props) {
           'projectLabel': inputvalue, 
           'deployUnits': JSON.stringify(selectedValues) 
         },
-
       };
       if(config===true){
         await axios.put('/clusters/host/api/v1/namespaces/default/configmaps/configset', configMap)
@@ -113,7 +110,6 @@ function GlobalConfiguration(props) {
       else{
         await axios.post('/clusters/host/api/v1/namespaces/default/configmaps', configMap)
         Notify.success('Dashboard Config Created')
-
       }
       // Save config data to local storage
       const configData = {
@@ -121,7 +117,6 @@ function GlobalConfiguration(props) {
         deployUnits: JSON.stringify(selectedValues)
       };
       localStorage.setItem('config', JSON.stringify(configData));
-    
     } catch (error) {
       console.error('Error creating ConfigMap:', error);
     }
@@ -138,8 +133,7 @@ function GlobalConfiguration(props) {
     <StyledOuterContainer>
     <Container>
       <StyledText variant="h3">{t("Project Label Key")}</StyledText>
-      <StyledInput value ={inputvalue} onChange={handleInputChange} placeholder="Select Project label" disabled={loading} />
-      
+      <StyledInput value ={inputvalue} onChange={handleInputChange} placeholder="Select Project label" disabled={loading} />   
       <StyledText variant="h3">{t("Deploy Units")}</StyledText>
       <StyledSelect 
         name="select-multi" 
@@ -151,7 +145,6 @@ function GlobalConfiguration(props) {
         placeholder={('name')}
         disabled={loading}
       />
-      
       <ButtonWrapper>
         <Button type="primary" loading={loading} onClick={handleClick}>{t("Save Config")}</Button>
       </ButtonWrapper>

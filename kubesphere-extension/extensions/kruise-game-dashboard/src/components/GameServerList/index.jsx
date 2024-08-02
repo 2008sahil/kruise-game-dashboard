@@ -314,7 +314,6 @@ function GameServerList(props) {
     ;
 
     const format = useCallback(item => {
-        console.log("item is ",item)
         let row = {
             id: item.metadata.uid,
             name: item.metadata.name,

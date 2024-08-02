@@ -33,7 +33,6 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
             try {
                 const existingContainers = currState.spec.containers || [];
                 const containerIndex = existingContainers.findIndex(container => container.name === selectedContainer);
-
                 // Conditionally create or update the container properties
                 if (containerIndex !== -1) {
                     // Container exists, update its resources
@@ -48,7 +47,6 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
                     if (!existingContainer.resources.requests) {
                         existingContainer.resources.requests = {};
                     }
-
                     // Conditionally add non-empty resource limits and requests
                     if (limitcpu !== "") existingContainer.resources.limits.cpu = limitcpu;
                     if (limitmemory !== "") existingContainer.resources.limits.memory = limitmemory;
@@ -194,7 +192,6 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
                             <Input placeholder='update request memory' onChange={(e) => { setrequestmemory(e.target.value) }} />
 
                         </div>
-
                     </div>
                     <div>
                         <Text style={{ fontWeight: "bold" }}>Limit:</Text>
@@ -206,12 +203,10 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
 
                         </div>
                     </div>
-
                     <div style={{ marginTop: "5px", marginBottom: "5px" }}>
                         <Checkbox label="Select to Recreate the pod " checked={checked} onChange={()=>{setchecked(!checked)}} />
                     </div>
                 </Container>
-
             </Modal>
         </div>
     )
