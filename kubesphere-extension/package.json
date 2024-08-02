@@ -146,7 +146,9 @@
   },
   "dependencies": {
     "@ks-console/bootstrap": "^0.0.5",
+    "@ks-console/bootstrap": "^0.0.5",
     "@ks-console/server": "^0.0.1",
+    "@ks-console/shared": "^0.0.4",
     "@ks-console/shared": "^0.0.4",
     "@kube-design/components": "^1.32.0",
     "@kubed/charts": "^0.0.14",
@@ -154,10 +156,10 @@
     "@kubed/components": "^0.2.8",
     "@kubed/diff-viewer": "^0.0.15",
     "@kubed/hooks": "^0.0.14",
-    "@kubed/icons": "^0.0.13",
-    "@kubed/log-viewer": "^0.0.14",
+    "@kubed/icons": "^0.0.16",
+    "@kubed/log-viewer": "^0.0.17",
     "@kubed/stook": "^0.0.4",
-    "create-ks-project": "^0.0.22",
+    "create-ks-project": "^0.0.23",
     "global": "^4.4.0"
   }
 }
