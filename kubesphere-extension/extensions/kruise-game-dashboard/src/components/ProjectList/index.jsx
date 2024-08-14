@@ -140,7 +140,7 @@ function ProjectList() {
 
   const columns = [
     {
-      title: t('projectName'),
+      title: t('Projects'),
       dataIndex: 'projectName',
       render: (value,record) => {return <Link to={`/kruise-game-dashboard/projects/${value}`}>{value}</Link>},
     },
@@ -155,7 +155,7 @@ function ProjectList() {
       sorter: true,
     },
     {
-      title: t('deployUnits'),
+      title: t('DeployUnits'),
       dataIndex: 'deployUnits',
       render: (deployUnits) => deployUnits.join(', '),
     },
@@ -182,8 +182,8 @@ function ProjectList() {
       <Banner
         className="mb12"
         icon={<Icon name="appcenter" size={40} />}
-        title={t("Projectslist")}
-        description={t("Projectslist_description")}
+        title={t("ProjectPage")}
+        description={t("ProjectsPage_description")}
       />
       <Table
         rowKey="projectName"

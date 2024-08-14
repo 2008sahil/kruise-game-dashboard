@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, FilterInput, Menu, MenuItem, MenuLabel, Dropdown, Field,Banner } from '@kubed/components';
 import { Refresh, Cogwheel, Eye, EyeClosed, Trash, Pen } from "@kubed/icons";
-import { Table, Pagination, Select } from "@kube-design/components";
+import { Table, Pagination, Select, Notify } from "@kube-design/components";
 import {  useParams } from 'react-router-dom';
 import { Avatar, Icon, } from "@ks-console/shared";
 import axios from 'axios';
@@ -285,6 +285,7 @@ const ProjectGameServerSetList = () => {
     setIsRelicaModalVisible(false);
     setreload(!reload)
     setSelectedRowKeys([])
+    Notify.success(value)
   };
 
   const refetch = () => {
@@ -417,8 +418,8 @@ const ProjectGameServerSetList = () => {
       <Banner
         className="mb12"
         icon={<Icon name="appcenter" size={40}/>}
-        title={t("gameserversets")}
-        description={t("gameserversets_description")}
+        title={t("Project_Gameserversets_Table")}
+        description={t("Project_Gameserversets_description")}
       />
       <ToolbarWrapper>
         {selectedRowKeys.length > 0 && (
@@ -451,7 +452,7 @@ const ProjectGameServerSetList = () => {
             <FilterInput
               filters={filter}
               suggestions={[
-                { label: 'Name', key: 'Name' }
+                { label: t('name'), key: 'Name' }
               ]}
               onChange={handleFilterChange}
             />

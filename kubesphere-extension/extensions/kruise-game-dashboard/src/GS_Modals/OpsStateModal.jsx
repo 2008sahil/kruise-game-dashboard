@@ -38,13 +38,13 @@ export const OpsStateModal = ({visible, onCancel, onOk, resources,setvisible,loa
         setvisible(false)
         loading(true)
         await handlePatchRequest();
-        onOk("OpsState Updated");
+        onOk(t("OpsState Updated"));
       };
 
     const title = (
         <div style={{ display: 'flex', justifyContent: 'center', gap: "5px" }}>
           <Error />
-          <Text>{"Update OpsSate" }</Text>
+          <Text>{t("Update OpsSate") }</Text>
         </div>
       )
 
@@ -67,6 +67,10 @@ export const OpsStateModal = ({visible, onCancel, onOk, resources,setvisible,loa
         width={500}
         closable={false}
         footer={footer}
+        destroyOnClose={true} 
+        maskClosable={false} 
+        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }} 
+        aria-hidden={!visible} 
         >
             <AutoComplete placeholder="Set opsState..." style={{ width: "100%" }} options={[{ value: "WaitToBeDeleted" },{ value:"None" },{ value: "Allocated" },{ value: "Maintaining" },{ value: "Kill" } ]}  onChange={(data) => setFieldValue(data)}/>
         </Modal>

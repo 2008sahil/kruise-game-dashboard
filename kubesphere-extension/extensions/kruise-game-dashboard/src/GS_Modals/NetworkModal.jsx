@@ -38,13 +38,13 @@ export const NetworkModal = ({visible, onCancel, onOk, resources,setvisible,load
         setvisible(false)
         loading(true)
         await handleNeworkRequest();
-        onOk("NetworkState Updated");
+        onOk(t("NetworkState Updated"));
       };
 
     const title = (
         <div style={{ display: 'flex', justifyContent: 'center', gap: "5px" }}>
           <Error />
-          <Text>{"Set NetworkDisabled" }</Text>
+          <Text>{t("Set_NetworkDisabled") }</Text>
         </div>
       )
 
@@ -67,6 +67,10 @@ export const NetworkModal = ({visible, onCancel, onOk, resources,setvisible,load
         width={500}
         closable={false}
         footer={footer}
+        destroyOnClose={true} 
+        maskClosable={false} 
+        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }} 
+        aria-hidden={!visible} 
         >
             <Select placeholder="Set Network..." style={{ width: "100%" }} options={[{ value: true,label:"True" },{ value:false,label: "False" } ]}  onChange={(data) => setFieldValue(data)}/>
 

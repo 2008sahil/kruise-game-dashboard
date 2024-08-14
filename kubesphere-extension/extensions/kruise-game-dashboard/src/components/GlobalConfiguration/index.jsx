@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Select, Button,Notify } from "@kube-design/components";
+import { Select, Button, Notify } from "@kube-design/components";
 import { Text, Input, Container } from '@kubed/components';
 import styled from 'styled-components';
 import axios from "axios";
@@ -84,10 +84,10 @@ function GlobalConfiguration(props) {
 
   const handleClick=async ()=>{
     if(!inputvalue.trim()){
-      return Notify.warning('Project label cannot be empty')
+      return Notify.warning(t('Empty_Project_label'))
     }
     if(selectedValues.length === 0){
-      return Notify.warning('Please select at least one Deploy Unit')
+      return Notify.warning(t('Select_One_DeployUnit'))
     }
     setloading(true)
     try{
@@ -104,12 +104,19 @@ function GlobalConfiguration(props) {
         },
       };
       if(config===true){
-        await axios.put('/clusters/host/api/v1/namespaces/default/configmaps/configset', configMap)
-         Notify.success('Dashboard Config Updated')
+        try{
+          await axios.put('/clusters/host/api/v1/namespaces/default/configmaps/configset', configMap)
+          Notify.success(t('Dashboard_Config_Updated'))
+
+        }
+        catch(error){
+          await axios.post('/clusters/host/api/v1/namespaces/default/configmaps', configMap)
+          Notify.success(t('Dashboard_Config_Created'))
+        }
       }
       else{
         await axios.post('/clusters/host/api/v1/namespaces/default/configmaps', configMap)
-        Notify.success('Dashboard Config Created')
+        Notify.success(t('Dashboard_Config_Created'))
       }
       // Save config data to local storage
       const configData = {
@@ -132,9 +139,9 @@ function GlobalConfiguration(props) {
     
     <StyledOuterContainer>
     <Container>
-      <StyledText variant="h3">{t("Project Label Key")}</StyledText>
-      <StyledInput value ={inputvalue} onChange={handleInputChange} placeholder="Select Project label" disabled={loading} />   
-      <StyledText variant="h3">{t("Deploy Units")}</StyledText>
+      <StyledText variant="h3">{t("Project_Label_Key")}</StyledText>
+      <StyledInput value ={inputvalue} onChange={handleInputChange} placeholder={t("Select_Project_label")} disabled={loading} />   
+      <StyledText variant="h3">{t("Deploy_Units")}</StyledText>
       <StyledSelect 
         name="select-multi" 
         options={clusterOptions} 
@@ -146,7 +153,7 @@ function GlobalConfiguration(props) {
         disabled={loading}
       />
       <ButtonWrapper>
-        <Button type="primary" loading={loading} onClick={handleClick}>{t("Save Config")}</Button>
+        <Button type="primary" loading={loading} onClick={handleClick}>{("Save_Config")}</Button>
       </ButtonWrapper>
     </Container>
     </StyledOuterContainer>

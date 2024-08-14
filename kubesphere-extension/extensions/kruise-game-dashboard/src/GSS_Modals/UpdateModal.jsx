@@ -66,13 +66,13 @@ export const UpdateModal = ({ visible, onCancel, onOk, resources,setvisible,load
     await fetchGameServerSets();
     setInputValue("")
     setSelectedContainer("")
-    onOk("Updated");
+    onOk(t("Resource Image Updated"));
   };
 
   const title = (
     <div style={{ display: 'flex', justifyContent: 'center', gap: "5px" }}>
       <Update />
-      <Text>{resources.length > 1 ? "Update Multiple Resources" : "Update Resource"}</Text>
+      <Text>{resources.length > 1 ? t("Update Multiple Resources") : t("Update Resource")}</Text>
     </div>
   )
 
@@ -106,6 +106,10 @@ export const UpdateModal = ({ visible, onCancel, onOk, resources,setvisible,load
         width={500}
         closable={false}
         footer={footer}
+        destroyOnClose={true} 
+        maskClosable={false} 
+        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }} 
+        aria-hidden={!visible} 
       >
         <Container style={{ margin: "10px"}}>
           <div>

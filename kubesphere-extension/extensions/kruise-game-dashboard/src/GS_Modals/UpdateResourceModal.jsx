@@ -132,7 +132,7 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
         if (checked) {
             await HandlePodDelete();
         }
-        onOk("Updated");
+        onOk(t("Resource Updated"));
     };
     const resourceNames = resources.map(resource => resource.Name);
 
@@ -145,7 +145,7 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
             <Button variant="filled" color="default" onClick={onCancel}>
                 Cancel
             </Button>
-            <Button variant="filled" color="error" onClick={handleClick} >
+            <Button variant="filled" color="error" disabled={selectedContainer === ""} onClick={handleClick} >
                 OK
             </Button>
         </div>
@@ -167,6 +167,10 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
                 width={500}
                 closable={false}
                 footer={footer}
+                destroyOnClose={true}
+                maskClosable={false}
+                bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }}
+                aria-hidden={!visible}
             >
                 <Container style={{ margin: "5px" }}>
                     <Text>
@@ -187,24 +191,22 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
                         <Text style={{ fontWeight: "bold" }}>Request:</Text>
                         <div style={{ marginLeft: "20px", width: "90%" }}>
                             <Text>Cpu</Text>
-                            <Input placeholder="update request Cpu " onChange={(e) => { setrequestcpu(e.target.value) }} />
+                            <Input placeholder={t("update request Cpu ")} onChange={(e) => { setrequestcpu(e.target.value) }} />
                             <Text>Memory</Text>
-                            <Input placeholder='update request memory' onChange={(e) => { setrequestmemory(e.target.value) }} />
-
+                            <Input placeholder={t('update request memory' )}onChange={(e) => { setrequestmemory(e.target.value) }} />
                         </div>
                     </div>
                     <div>
                         <Text style={{ fontWeight: "bold" }}>Limit:</Text>
                         <div style={{ marginLeft: "20px", width: "90%" }}>
                             <Text>Cpu</Text>
-                            <Input placeholder='update limit cpu' onChange={(e) => { setlimitcpu(e.target.value) }} />
+                            <Input placeholder={t('update limit cpu')} onChange={(e) => { setlimitcpu(e.target.value) }} />
                             <Text>Memory</Text>
-                            <Input placeholder='update limit memory' onChange={(e) => { setrequestmemory(e.target.value) }} />
-
+                            <Input placeholder={t('update limit memory')} onChange={(e) => { setlimitmemory(e.target.value) }} />
                         </div>
                     </div>
                     <div style={{ marginTop: "5px", marginBottom: "5px" }}>
-                        <Checkbox label="Select to Recreate the pod " checked={checked} onChange={()=>{setchecked(!checked)}} />
+                        <Checkbox label={t("Select to Recreate the pod ")} checked={checked} onChange={()=>{setchecked(!checked)}} />
                     </div>
                 </Container>
             </Modal>

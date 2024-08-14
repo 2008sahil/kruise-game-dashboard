@@ -32,13 +32,13 @@ export const UpdateReplicaModal = ({ visible, onCancel, onOk, resources,setvisib
     loading(true)
     await fetchGameServerSets();
     setInputValue("")
-    onOk("Updated");
+    onOk(t("Resource Replicas Updated"));
   };
 
   const title = (
     <div style={{ display: 'flex', justifyContent: 'center', gap: "5px" }}>
       <Update />
-      <Text>{"Update Resource Replicas"}</Text>
+      <Text>{t("Update Resource Replicas")}</Text>
     </div>
   )
   
@@ -66,6 +66,10 @@ export const UpdateReplicaModal = ({ visible, onCancel, onOk, resources,setvisib
         width={500}
         closable={false}
         footer={footer}
+        destroyOnClose={true} 
+        maskClosable={false} 
+        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }} 
+        aria-hidden={!visible} 
       >
         <Container style={{ margin: "10px"}}>
           <div>

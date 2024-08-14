@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Table, Pagination, Select } from "@kube-design/components";
+import { Table, Pagination, Select, Notify } from "@kube-design/components";
 import { Banner } from '@kubed/components';
 import { Icon } from "@ks-console/shared";
 
@@ -34,6 +34,7 @@ function DeployUnitList(props) {
       }
     } catch (error) {
         console.error('Error fetching config:', error);
+        Notify.error(t("Error_fetching_config"))
         setIsLoading(false)
     }
     };
@@ -57,6 +58,7 @@ function DeployUnitList(props) {
           total: allData.length,
         }));
       } catch (error) {
+        Notify.error(t("Error_fetching_Deployunit"))
         console.error('Error fetching deploy units data:', error);
       } finally {
         setIsLoading(false);
@@ -138,7 +140,7 @@ function DeployUnitList(props) {
 
   const columns = [
     {
-      title: t('deployUnit'),
+      title: t('DeployUnits'),
       dataIndex: 'DeployUnit',
       render: (value) => <Link to={`/clusters/${value}/kruise-game-dashboard`}>{value}</Link>,
     },
@@ -153,9 +155,9 @@ function DeployUnitList(props) {
       sorter: true,
     },
     {
-      title: t('projects'),
+      title: t('Projects'),
       dataIndex: 'projects',
-      render: (projects) => projects || 'No projects',
+      render: (projects) => projects || t('No_projects'),
     },
   ];
 
@@ -180,7 +182,7 @@ function DeployUnitList(props) {
       <Banner
         className="mb12"
         icon={<Icon name="appcenter" size={40} />}
-        title={t("deployUnits")}
+        title={t("DeployUnits")}
         description={t("deployUnits_description")}
       />
       <Table

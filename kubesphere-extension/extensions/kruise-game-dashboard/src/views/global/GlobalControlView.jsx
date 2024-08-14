@@ -54,6 +54,11 @@ export default function GlobalControlView() {
                     name: 'deployunits',
                     icon: 'bird',
                     title: 'DeployUnits',
+                },
+                {
+                    name: 'resources',
+                    icon: 'bird',
+                    title: 'Add Resource',
                 }
             ],
         },

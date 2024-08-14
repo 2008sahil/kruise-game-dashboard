@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, FilterInput, Menu, MenuItem, MenuLabel, Dropdown, Field,Banner } from '@kubed/components';
 import { Refresh, Cogwheel, Eye, EyeClosed, Trash, Pen } from "@kubed/icons";
-import { Table, Pagination, Select } from "@kube-design/components";
+import { Table, Pagination, Select, Notify } from "@kube-design/components";
 import {  useParams } from 'react-router-dom';
 import { Avatar, Icon, } from "@ks-console/shared";
 import axios from 'axios';
@@ -27,6 +27,7 @@ const ProjectGameServerList = () => {
     { title: t('DP'), dataIndex: 'DP', isVisible: false,canHide: true, },
     { title: t('labels'), dataIndex: 'labels', isVisible: false,canHide: true,render: (value, record) => (<>  {value?.map((item, index) => {  return (  <Field key={index}  value={item.key + "=" + item.value}  />  )  })}  </>), },
     { title: t('UP'), dataIndex: 'UP', isVisible: false,canHide: true },
+    { title: t('templateResources'), dataIndex: 'templateResources', isVisible: false,canHide: true,render: (value, record) => (<>{value?.map((item, index) => {return (<Field  key={index}  value={item.key + " -> " + item.value}  />  )  })}  </>), },
     { title: t('annotations'), dataIndex: 'annotations', isVisible: false,canHide: true ,render: (value, record) => (  <>{value?.map((item, index) => { return ( <Field   key={index}   value={item.key + "=" + item.value}/>) })}  </>),},
     { title: t('creationTimestamp'), dataIndex: 'creationTimestamp', isVisible: false,canHide: true },
     { title: t('actions'), dataIndex: 'more', isVisible: true, width: 58, render: (value, record) => (
@@ -58,7 +59,6 @@ const ProjectGameServerList = () => {
   const [reload,setreload] =useState(false)
   const [IsDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [IsUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
-  const [IsRelicaModalVisible, setIsRelicaModalVisible] = useState(false);
   const [IsResourceModal, setIsResourceModal] = useState(false);
   const [IsOpsStateModal, setIsOpsStateModal] = useState(false);
   const [IsNetworkModal, setIsNetworkModal] = useState(false);
@@ -129,11 +129,11 @@ const ProjectGameServerList = () => {
       try {
         setIsLoading(true);
         const results = await Promise.all(deployUnits.map(fetchClusterData));
+        console.log("results are",results)
         const ProjectGameServerList = []
         results.forEach((gameServers, index) => {
           const clusterId = deployUnits[index];
           gameServers.forEach(item => {
-            console.log("item is ",item)
             let row = {
               id: item.metadata.uid,
               Name: item.metadata.name,
@@ -148,6 +148,7 @@ const ProjectGameServerList = () => {
               UP: item.status.updatePriority,
               images: (getImages(item.status.podStatus.containerStatuses)),
               conditions: Object.values(getConditions(item.status.conditions)),
+              templateResources:(getResources(item.spec.containers)),
               DeployUnit: clusterId,
               currState: item,
             };
@@ -208,6 +209,25 @@ const ProjectGameServerList = () => {
     }
     return kvs
 }
+
+function getResources(items) {
+    const kvs = []
+    if (items == undefined) return []
+    for (let i = 0; i < items.length; i++) {
+      let cpuRequest = items[i].resources?.requests?.cpu || '';
+      let memRequest = items[i].resources?.requests?.memory || '';
+      let cpuLimit = items[i].resources?.limits?.cpu || '';
+      let memLimit = items[i].resources?.limits?.memory || '';
+      let v = cpuRequest + " / " + memRequest + " / " + cpuLimit + " / " + memLimit;
+      kvs.push(
+        {
+          key: items[i].name,
+          value: v,
+        }
+      )
+    }
+    return kvs
+  }
 
   function getImages(items) {
     const kvs = []
@@ -285,7 +305,6 @@ const ProjectGameServerList = () => {
   const handleCancel = () => {
     setIsUpdateModalVisible(false);
     setIsDeleteModalVisible(false);
-    setIsRelicaModalVisible(false);
     setIsOpsStateModal(false)
     setIsNetworkModal(false)
     setIsResourceModal(false)
@@ -295,6 +314,8 @@ const ProjectGameServerList = () => {
     handleCancel();
     setreload(!reload)
     setSelectedRowKeys([])
+    Notify.success(value)
+    
   };
 
   const refetch = () => {
@@ -449,8 +470,8 @@ const ProjectGameServerList = () => {
       <Banner
         className="mb12"
         icon={<Icon name="appcenter" size={40}/>}
-        title={t("gameservers")}
-        description={t("gameservers_description")}
+        title={t("Project_Gameservers_Table")}
+        description={t("Project_Gameservers_description")}
       />
       <ToolbarWrapper>
         {selectedRowKeys.length > 0 && (
@@ -483,8 +504,8 @@ const ProjectGameServerList = () => {
             <FilterInput
               filters={filter}
               suggestions={[
-                { label: 'Name', key: 'Name' },
-                { label: 'opsState', key: 'opsState' }
+                { label: t('name'), key: 'Name' },
+                { label: t('opsState'), key: 'opsState' }
               ]}
               onChange={handleFilterChange}
             />

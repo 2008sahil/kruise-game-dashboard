@@ -52,11 +52,6 @@ function ProjectDetailView(props) {
                     icon: 'bird',
                     title: 'gameservers',
                 },
-                {
-                    name: 'matchservice',
-                    icon: 'bird',
-                    title: 'MatchService',
-                },
             ],
         },
     ];

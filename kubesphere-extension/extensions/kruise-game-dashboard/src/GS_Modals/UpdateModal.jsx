@@ -90,7 +90,7 @@ export const UpdateModal = ({ visible, onCancel, onOk, resources, setvisible, lo
     if(checked){
       await HandlePodDelete();
     }
-    onOk("Updated");
+    onOk(t("Image Updated"));
   };
 
   const title = (
@@ -131,6 +131,10 @@ export const UpdateModal = ({ visible, onCancel, onOk, resources, setvisible, lo
         width={500}
         closable={false}
         footer={footer}
+        destroyOnClose={true} 
+        maskClosable={false} 
+        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }} 
+        aria-hidden={!visible} 
       >
         <Container style={{ margin: "10px" }}>
           <div>
@@ -151,7 +155,7 @@ export const UpdateModal = ({ visible, onCancel, onOk, resources, setvisible, lo
           <Text>{t("Update Image")}</Text>
           <Input placeholder="Update Gameserver Image ..." value={inputValue} onChange={handleImageChange} />
           <div style={{ marginTop: "5px", marginBottom: "5px" }}>
-            <Checkbox label="Select to Recreate the pod " checked={checked} onChange={()=>{setchecked(!checked)}} />
+            <Checkbox label={t("Select to Recreate the pod ")} checked={checked} onChange={()=>{setchecked(!checked)}} />
           </div>
         </Container>
       </Modal>

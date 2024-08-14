@@ -28,17 +28,17 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
     loading(true)
     await DeleteResources();
     setInputValue("")
-    onOk("Deleted");
+    onOk(t("Resource Deleted"));
   };
 
   const title = (
     <div style={{ display: 'flex', justifyContent: 'center', gap: "5px" }}>
       <Error />
-      <Text>{resources.length > 1 ? "Delete Multiple Resources" : "Delete Resource"}</Text>
+      <Text>{resources.length > 1 ? t("Delete Multiple Resources") : t("Delete Resource")}</Text>
     </div>
   )
 
-  const message = `Enter the ${gss===true?"gamserversets":"gameservers"} names ${resourceNames.join(', ')} to confirm that you understand the risks of this operation.`;
+  const message = `Enter the ${gss===true?t("gamserversets"):t("gameservers")} names ${resourceNames.join(', ')} to confirm that you understand the risks of this operation.`;
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -64,6 +64,10 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
         width={500}
         closable={false}
         footer={footer}
+        destroyOnClose={true} 
+        maskClosable={false} 
+        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }} 
+        aria-hidden={!visible} 
       >
         <Container style={{ margin: "10px" }}>
           <div>
