@@ -1,6 +1,6 @@
 apiVersion: kubesphere.io/v1alpha1
-name: kruise-game-dashboard
-version: 0.1.0
+name: kruise-game-dashboard-V
+version: 2.0
 displayName:
   zh: OKG Dashboard
   en: OKG Dashboard
