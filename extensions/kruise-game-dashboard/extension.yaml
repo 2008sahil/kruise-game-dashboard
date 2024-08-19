@@ -33,8 +33,6 @@ staticFileDirectory: static
 icon: ./static/favicon.svg
 screenshots:
   - ./static/screenshots/overview.jpg
-  - ./static/screenshots/gameserverset.jpg
-  - ./static/screenshots/gameserver.jpg
 
 dependencies:
   - name: frontend

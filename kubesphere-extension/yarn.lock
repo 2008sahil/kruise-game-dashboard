@@ -2684,6 +2684,11 @@ ace-builds@^1.12.5, ace-builds@^1.4.14:
   resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.31.2.tgz#bd5d0ee4243b9ae4358563889cb5663f4893b3e7"
   integrity sha512-IeZI9ytPA6mB+goPxPkUPW4vXBoLuaBl5czu2tjtKrMi7mdRgyIUA/8e5JlrI1mqKoMeWHoUujzMTWkyutTdBw==
 
+ace-builds@^1.32.8:
+  version "1.35.4"
+  resolved "https://registry.yarnpkg.com/ace-builds/-/ace-builds-1.35.4.tgz#f41d7ef57c3a7d424cd7e3300bef0cbef905c84f"
+  integrity sha512-r0KQclhZ/uk5a4zOqRYQkJuQuu4vFMiA6VTj54Tk4nI1TUR3iEMMppZkWbNoWEgWwv4ciDloObb9Rf4V55Qgjw==
+
 acorn-import-assertions@^1.9.0:
   version "1.9.0"
   resolved "https://registry.yarnpkg.com/acorn-import-assertions/-/acorn-import-assertions-1.9.0.tgz#507276249d684797c84e0734ef84860334cfb1ac"
@@ -10117,6 +10122,17 @@ react-ace@^10.1.0:
     lodash.get "^4.4.2"
     lodash.isequal "^4.5.0"
     prop-types "^15.7.2"
+
+react-ace@^12.0.0:
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/react-ace/-/react-ace-12.0.0.tgz#d40afc7382092109eead7227d9426f55dcc2209d"
+  integrity sha512-PstU6CSMfYIJknb4su2Fa0WgLXzq2ufQgR6fjcSWuGT1hGTHkBzuKw+SncV8PuLCdSJBJc1VehPhyeXlWByG/g==
+  dependencies:
+    ace-builds "^1.32.8"
+    diff-match-patch "^1.0.5"
+    lodash.get "^4.4.2"
+    lodash.isequal "^4.5.0"
+    prop-types "^15.8.1"
 
 react-dom@^17.0.2:
   version "17.0.2"

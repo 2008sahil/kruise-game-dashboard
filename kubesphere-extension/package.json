@@ -158,6 +158,10 @@
     "@kubed/log-viewer": "^0.0.17",
     "@kubed/stook": "^0.0.4",
     "create-ks-project": "^0.0.23",
-    "global": "^4.4.0"
+    "file-saver": "^2.0.5",
+    "global": "^4.4.0",
+    "js-yaml": "^4.1.0",
+    "react-ace": "^12.0.0",
+    "react-file-reader": "^1.1.4"
   }
 }
