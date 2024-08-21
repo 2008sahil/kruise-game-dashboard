@@ -11,11 +11,10 @@ import {
 } from './style.jsx'; // Assuming the styles are in StyledComponents.js
 
 const GlobalOverview = () => {
-  console.log("test 4")
   return (
     <GlobalOverviewWrapper>
       <Title>Global Overview</Title>
-      
+
       <section className="intro">
         <SectionHeader>Welcome to the OKG Dashboard</SectionHeader>
         <SectionContent>

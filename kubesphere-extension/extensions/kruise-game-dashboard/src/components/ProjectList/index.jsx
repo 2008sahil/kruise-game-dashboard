@@ -12,7 +12,7 @@ const ProjectList =() => {
   const [allprojectData, setallprojectData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, total: 0, limit: 5 });
-  
+
   useEffect(() => {
     console.log("page loaded")
     const fetchConfig = async () => {
@@ -148,12 +148,12 @@ const ProjectList =() => {
     {
       title: t('gameServerSetCount'),
       dataIndex: 'gameServerSetCount',
-      // sorter: true,
+      sorter: true,
     },
     {
       title: t('gameServerCount'),
       dataIndex: 'gameServerCount',
-      // sorter: true,
+      sorter: true,
     },
     {
       title: t('DeployUnits'),
