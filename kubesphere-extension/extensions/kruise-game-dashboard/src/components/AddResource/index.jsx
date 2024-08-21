@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useImperativeHandle, RefObject, forwardRef } from 'react';
-import AceEditor, { IAceEditorProps } from 'react-ace';
+// import AceEditor, { IAceEditorProps } from 'react-ace';
+import { CodeEditor } from '@kubed/code-editor';
 import ReactFileReader from 'react-file-reader';
 import { Download, Upload } from '@kubed/icons';
 import { useForceUpdate } from '@kubed/hooks';
@@ -147,21 +148,11 @@ const Resource = () => {
       />
         </div>
     <EditorWrapper>
-        <AceEditor
+        <CodeEditor
           // @ts-ignore
-          theme="chaos"
-          width="auto"
-          height="100%"
-          tabSize={2}
-          showPrintMargin={false}
-          keyboardHandler="vscode"
-          mode={'yaml'}
           onChange={handleChange}
           value={_value}
-          setOptions={{
-            useWorker: false,
-          }}
-          wrapEnabled
+          
         />
         {renderActions()}
       </EditorWrapper>
