@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { Button, FilterInput, Menu, MenuItem, MenuLabel, Dropdown, Field,Banner } from '@kubed/components';
 import { Refresh, Cogwheel, Eye, EyeClosed, Trash, Pen } from "@kubed/icons";
 import { Table, Pagination, Select, Notify } from "@kube-design/components";
-import {  useParams } from 'react-router-dom';
+// import {  useParams } from 'react-router-dom';
 import { Avatar, Icon, } from "@ks-console/shared";
 import axios from 'axios';
-import { ToolbarWrapper, ToolbarInner, BatchActions } from '../ProjectGameServerSetList/style.ts';
+import { ToolbarWrapper, ToolbarInner, BatchActions } from '../ProjectGameServerSetList/style.jsx';
 import {OpsStateModal} from '../../GS_Modals/OpsStateModal.jsx'
 import { NetworkModal } from '../../GS_Modals/NetworkModal.jsx';
 import { DeleteModal } from '../../GSS_Modals/DeleteModal.jsx';
@@ -64,7 +64,7 @@ const ProjectGameServerList = () => {
   const [IsNetworkModal, setIsNetworkModal] = useState(false);
   const [resources,setresources]=useState([]);
 
-  const { projectId } = useParams();
+  const { projectId } = "project-e";
 
   useEffect(() => {
     let isMounted = true;

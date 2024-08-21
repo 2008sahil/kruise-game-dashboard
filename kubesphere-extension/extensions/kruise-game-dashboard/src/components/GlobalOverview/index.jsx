@@ -8,9 +8,10 @@ import {
   CoreComponentsList,
   WhyOKGList,
   DashboardPagesList
-} from './index.ts'; // Assuming the styles are in StyledComponents.js
+} from './style.jsx'; // Assuming the styles are in StyledComponents.js
 
 const GlobalOverview = () => {
+  console.log("test 4")
   return (
     <GlobalOverviewWrapper>
       <Title>Global Overview</Title>

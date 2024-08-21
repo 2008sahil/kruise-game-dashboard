@@ -5,7 +5,7 @@ import { Table, Pagination, Select, Notify } from "@kube-design/components";
 import {  useParams } from 'react-router-dom';
 import { Avatar, Icon, } from "@ks-console/shared";
 import axios from 'axios';
-import { ToolbarWrapper, ToolbarInner, BatchActions } from './style.ts';
+import { ToolbarWrapper, ToolbarInner, BatchActions } from './style.jsx';
 import { DeleteModal } from '../../GSS_Modals/DeleteModal.jsx';
 import { UpdateModal } from '../../GSS_Modals/UpdateModal.jsx';
 import { UpdateReplicaModal } from '../../GSS_Modals/UpdateReplicaModal.jsx';

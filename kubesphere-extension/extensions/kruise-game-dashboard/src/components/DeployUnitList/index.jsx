@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { Table, Pagination, Select, Notify } from "@kube-design/components";
 import { Banner } from '@kubed/components';
 import { Icon } from "@ks-console/shared";
 
-function DeployUnitList(props) {
+const DeployUnitList=(props)=> {
 
   const [config, setConfig] = useState(null);
   const [DeployUnitsData, setDeployUnitsData] = useState([]);
@@ -142,7 +142,7 @@ function DeployUnitList(props) {
     {
       title: t('DeployUnits'),
       dataIndex: 'DeployUnit',
-      render: (value) => <Link to={`/clusters/${value}/kruise-game-dashboard`}>{value}</Link>,
+      render: (value) => {value},
     },
     {
       title: t('gameServerSetCount'),
@@ -190,7 +190,6 @@ function DeployUnitList(props) {
         columns={columns}
         dataSource={DeployUnitsData}
         loading={isLoading}
-        pagination={pagination}
         onChange={handleTableChange}
         footer={footer}
       />

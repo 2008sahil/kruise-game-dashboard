@@ -6,7 +6,7 @@ import { Download, Upload } from '@kubed/icons';
 import { useForceUpdate } from '@kubed/hooks';
 import { saveAs } from 'file-saver';
 import { isEmpty } from 'lodash';
-import { EditorWrapper, ActionWrapper, Divider } from './style';
+import {  ActionWrapper, Divider } from './style';
 import { Button,Notify,Select } from "@kube-design/components";
 import axios from 'axios';
 import yaml from 'js-yaml';
@@ -127,7 +127,7 @@ const Resource = () => {
             <Upload fill="#fff" color="#fff" size={20} />
           </ReactFileReader>
         
-        <Divider>|</Divider>
+         <Divider>|</Divider>
         <Download fill="#fff" color="#fff" size={20} onClick={handleDownload} />
       </ActionWrapper>
     );
@@ -147,7 +147,7 @@ const Resource = () => {
         disabled={loading}
       />
         </div>
-    <EditorWrapper>
+    {/* <EditorWrapper> */}
         <CodeEditor
           // @ts-ignore
           onChange={handleChange}
@@ -155,7 +155,7 @@ const Resource = () => {
           
         />
         {renderActions()}
-      </EditorWrapper>
+      {/* </EditorWrapper> */}
       <div style={{marginTop:"20px",display:"flex",justifyContent:"center"}}>
         <Button type="primary" loading={loading} onClick={handleSubmit}>
             Submit

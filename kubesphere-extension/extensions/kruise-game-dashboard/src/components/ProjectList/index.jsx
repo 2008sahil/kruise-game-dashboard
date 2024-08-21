@@ -1,19 +1,20 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { Table, Pagination, Select } from "@kube-design/components";
 import { Banner } from '@kubed/components';
 import { Icon } from "@ks-console/shared";
 
-function ProjectList() {
+const ProjectList =() => {
 
   const [config, setConfig] = useState(null);
   const [projectsData, setProjectsData] = useState([]);
   const [allprojectData, setallprojectData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ page: 1, total: 0, limit: 5 });
-
+  
   useEffect(() => {
+    console.log("page loaded")
     const fetchConfig = async () => {
       setIsLoading(true)
       try {
@@ -138,21 +139,21 @@ function ProjectList() {
     setProjectsData(newData);
   };
 
-  const columns = [
+  const getColumns = [
     {
       title: t('Projects'),
       dataIndex: 'projectName',
-      render: (value,record) => {return <Link to={`/kruise-game-dashboard/projects/${value}`}>{value}</Link>},
+      render: (value,record) => {return {value}},
     },
     {
       title: t('gameServerSetCount'),
       dataIndex: 'gameServerSetCount',
-      sorter: true,
+      // sorter: true,
     },
     {
       title: t('gameServerCount'),
       dataIndex: 'gameServerCount',
-      sorter: true,
+      // sorter: true,
     },
     {
       title: t('DeployUnits'),
@@ -187,7 +188,7 @@ function ProjectList() {
       />
       <Table
         rowKey="projectName"
-        columns={columns}
+        columns={getColumns}
         dataSource={projectsData}
         loading={isLoading}
         pagination={pagination}
