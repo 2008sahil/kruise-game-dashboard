@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Table, Pagination, Select, Notify } from "@kube-design/components";
 import { Banner } from '@kubed/components';
 import { Icon } from "@ks-console/shared";
@@ -20,8 +20,8 @@ const DeployUnitList=(props)=> {
       const storedConfig = localStorage.getItem('config');
       if (storedConfig) {
         const configData = JSON.parse(storedConfig);
-        setConfig(configData);            
-      } 
+        setConfig(configData);
+      }
       else{
         const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
         setConfig(response.data);
@@ -30,7 +30,7 @@ const DeployUnitList=(props)=> {
           projectLabel: response.data.projectLabel,
           deployUnits: response.data.deployUnits
         };
-        localStorage.setItem('config', JSON.stringify(configData));        
+        localStorage.setItem('config', JSON.stringify(configData));
       }
     } catch (error) {
         console.error('Error fetching config:', error);
@@ -51,7 +51,7 @@ const DeployUnitList=(props)=> {
       try {
         const results = await Promise.all(fetchPromises);
         const allData = results.filter(data => data); // Filter out any undefined values
-        setAllDeployUnitsData(allData);        
+        setAllDeployUnitsData(allData);
         setDeployUnitsData(allData.slice(0, pagination.limit));
         setPagination(prevState => ({
           ...prevState,
@@ -142,7 +142,7 @@ const DeployUnitList=(props)=> {
     {
       title: t('DeployUnits'),
       dataIndex: 'DeployUnit',
-      render: (value) => {value},
+      render: (value) => <Link to={`/clusters/${value}/kruise-game-dashboard`}>{value}</Link>,
     },
     {
       title: t('gameServerSetCount'),

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Table, Pagination, Select } from "@kube-design/components";
 import { Banner } from '@kubed/components';
 import { Icon } from "@ks-console/shared";
@@ -143,7 +143,7 @@ const ProjectList =() => {
     {
       title: t('Projects'),
       dataIndex: 'projectName',
-      render: (value,record) => {return {value}},
+      render: (value,record) =>  {return <Link to={`/kruise-game-dashboard/projects/${value}`}>{value}</Link>},
     },
     {
       title: t('gameServerSetCount'),
