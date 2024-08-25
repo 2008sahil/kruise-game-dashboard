@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Table, Pagination, Select, Notify } from "@kube-design/components";
+import { Table, Pagination, Select } from "@kube-design/components";
 import { Banner } from '@kubed/components';
 import { Icon } from "@ks-console/shared";
 
@@ -23,7 +23,7 @@ const DeployUnitList=(props)=> {
         setConfig(configData);
       }
       else{
-        const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
+        const response = await axios.get('/clusters/host/api/v1/namespaces/default/configmaps/configset');
         setConfig(response.data);
         // Save config data to local storage
         const configData = {
@@ -34,7 +34,6 @@ const DeployUnitList=(props)=> {
       }
     } catch (error) {
         console.error('Error fetching config:', error);
-        Notify.error(t("Error_fetching_config"))
         setIsLoading(false)
     }
     };
@@ -71,7 +70,7 @@ const DeployUnitList=(props)=> {
   const fetchClusterData = async (clusterId, projectLabelKey) => {
     try {
       const gameServerSetsResponse = await axios.get(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/gameserversets`);
-      const gameServerSets = gameServerSetsResponse.items;
+      const gameServerSets = gameServerSetsResponse.items || gameServerSetsResponse.data.items || [];
       let gameServerSetCount = 0;
       let gameServerCount = 0;
       const projects = [];
@@ -147,12 +146,12 @@ const DeployUnitList=(props)=> {
     {
       title: t('gameServerSetCount'),
       dataIndex: 'gameServerSetCount',
-      sorter: true,
+      // sorter: true,
     },
     {
       title: t('gameServerCount'),
       dataIndex: 'gameServerCount',
-      sorter: true,
+      // sorter: true,
     },
     {
       title: t('Projects'),

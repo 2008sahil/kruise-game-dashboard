@@ -11,9 +11,9 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
   const DeleteResources = async () => {
     const DeleteResource = async (resource_name,clusterId,ns) => {
       try {
-        await axios.delete(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/namespaces/${ns}/${gss===true?"gameserversets":"gameservers"}/${resource_name}`)        
+        await axios.delete(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/namespaces/${ns}/${gss===true?"gameserversets":"gameservers"}/${resource_name}`)
       } catch (error) {
-        console.error(`Error fetching data for cluster ${clusterId}:`, error);       
+        console.error(`Error fetching data for cluster ${clusterId}:`, error);
       }
     };
     try {
@@ -44,7 +44,7 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
     const value = e.target.value;
     setInputValue(value);
   };
-  
+
   const footer = (
     <div>
       <Button variant="filled" color="default" onClick={onCancel}>
@@ -55,7 +55,7 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
       </Button>
     </div>
   )
-  
+
   return (
     <div>
       <Modal
@@ -64,10 +64,11 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
         width={500}
         closable={false}
         footer={footer}
-        destroyOnClose={true} 
-        maskClosable={false} 
-        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }} 
-        aria-hidden={!visible} 
+        destroyOnClose={true}
+        maskClosable={false}
+        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }}
+        data-modal-content // Use this to manage focus
+        tabIndex={-1} // Ensure the modal can be focused
       >
         <Container style={{ margin: "10px" }}>
           <div>

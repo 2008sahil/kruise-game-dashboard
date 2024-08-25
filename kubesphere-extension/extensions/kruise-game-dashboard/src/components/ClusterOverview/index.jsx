@@ -84,8 +84,8 @@ function ClusterOverview(props) {
                 <Col span={16}>
                     <Banner
                         icon={<Icon name="application" size={20}/>}
-                        title={t("gs_overview")}
-                        description={t("gameservers_description")}
+                        title={t("Deployunit_overview")}
+                        description={t("Overview of the GameServers associated with this cluster.")}
                     />
                 </Col>
             </Row>

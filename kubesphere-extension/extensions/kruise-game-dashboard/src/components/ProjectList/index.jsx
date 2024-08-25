@@ -14,7 +14,6 @@ const ProjectList =() => {
   const [pagination, setPagination] = useState({ page: 1, total: 0, limit: 5 });
 
   useEffect(() => {
-    console.log("page loaded")
     const fetchConfig = async () => {
       setIsLoading(true)
       try {
@@ -24,7 +23,7 @@ const ProjectList =() => {
           setConfig(configData);
         }
         else {
-          const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
+          const response = await axios.get('/clusters/host/api/v1/namespaces/default/configmaps/configset');
           setConfig(response.data);
           // Save config data to local storage
           const configData = {
@@ -49,7 +48,7 @@ const ProjectList =() => {
       const fetchClusterData = async (clusterId) => {
         try {
           const response = await axios.get(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/gameserversets`);
-          return response.items;
+          return (response.items !== undefined ? response.items : response.data.items);
         } catch (error) {
           console.error(`Error fetching data for cluster ${clusterId}:`, error);
           return [];
@@ -148,12 +147,12 @@ const ProjectList =() => {
     {
       title: t('gameServerSetCount'),
       dataIndex: 'gameServerSetCount',
-      sorter: true,
+      // sorter: true,
     },
     {
       title: t('gameServerCount'),
       dataIndex: 'gameServerCount',
-      sorter: true,
+      // sorter: true,
     },
     {
       title: t('DeployUnits'),

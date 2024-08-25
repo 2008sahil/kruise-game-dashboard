@@ -29,7 +29,11 @@ export default [
                 element: <GameServerSetList/>,
             },
             {
-                path: '/clusters/:name/kruise-game-dashboard/gameservers/:gameserverset?',
+                path: '/clusters/:name/kruise-game-dashboard/gameservers/',
+                element: <GameServerList/>,
+            },
+            {
+                path: '/clusters/:name/kruise-game-dashboard/gameservers/:gameserverset',
                 element: <GameServerList/>,
             },
         ]

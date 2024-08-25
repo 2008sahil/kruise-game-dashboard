@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FilterInput, Menu, MenuItem, MenuLabel, Dropdown, Field,Banner } from '@kubed/components';
+import { Button, FilterInput, Menu, MenuItem, MenuLabel, Dropdown, Field,Banner, notify } from '@kubed/components';
 import { Refresh, Cogwheel, Eye, EyeClosed, Trash, Pen } from "@kubed/icons";
-import { Table, Pagination, Select, Notify } from "@kube-design/components";
-// import {  useParams } from 'react-router-dom';
+import { Table, Pagination, Select } from "@kube-design/components";
+import {  useParams } from 'react-router-dom';
 import { Avatar, Icon, } from "@ks-console/shared";
 import axios from 'axios';
 import { ToolbarWrapper, ToolbarInner, BatchActions } from '../ProjectGameServerSetList/style.jsx';
@@ -17,10 +17,10 @@ const PAGINATION_OPTIONS = [5, 10, 50];
 const ProjectGameServerList = () => {
 
   const COLUMNS = [
-    { title: t('name'), dataIndex: 'Name', sorter: true, canHide: true, isVisible: true,render: (value, record) => (  <Field    label={record.namespace || "-"}  value={record.Name}  />), },
+    { title: t('name'), dataIndex: 'Name',  canHide: true, isVisible: true,render: (value, record) => (  <Field    label={record.namespace || "-"}  value={record.Name}  />), },
     { title: t('deployUnit'), dataIndex: 'DeployUnit', searchable: true, canHide: true, isVisible: true },
-    { title: t('state'), dataIndex: 'state', sorter: true, canHide: true, isVisible: true },
-    { title: t('opsState'), dataIndex: 'opsState', sorter: true, canHide: true, isVisible: true},
+    { title: t('state'), dataIndex: 'state',  canHide: true, isVisible: true },
+    { title: t('opsState'), dataIndex: 'opsState',  canHide: true, isVisible: true},
     { title: t('networkState'), dataIndex: 'networkState', isVisible: true,canHide: true },
     { title: t('images'), dataIndex: 'images', isVisible: true ,canHide: true ,render: (value, record) => (<>{value?.map((item, index) => {return (<Field key={index} value={item[0] + " -> " + item[1]}/>)})}</>),},
     { title: t('conditions'), dataIndex: 'conditions', isVisible: false,canHide: true,render: (value, record) => (<>{value?.map((item, index) => {  return (  <Field  key={index}  value={item.key + ":" + item.value}  />  )  })}  </>), },
@@ -45,7 +45,7 @@ const ProjectGameServerList = () => {
       </>
   )}
   ];
-  
+
   const [filter, setFilter] = useState([]);
   const [config, setConfig] = useState({ deployUnits: [], projectLabel: "" });
   const [pagination, setPagination] = useState({ page: 1, total: 0, limit: 5 });
@@ -64,7 +64,7 @@ const ProjectGameServerList = () => {
   const [IsNetworkModal, setIsNetworkModal] = useState(false);
   const [resources,setresources]=useState([]);
 
-  const { projectId } = "project-e";
+  const { projectId } = useParams();
 
   useEffect(() => {
     let isMounted = true;
@@ -109,7 +109,7 @@ const ProjectGameServerList = () => {
       isMounted = false;
     };
   }, []);
-  
+
   useEffect(() => {
     let isMounted = true;
     const fetchGameServers = async () => {
@@ -119,7 +119,7 @@ const ProjectGameServerList = () => {
             labelSelector: `${config.projectLabel}=${projectId}`
           }).toString();
           const response = await axios.get(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/gameservers?${filterParams}`)
-          return response.items;
+          return response.items !== undefined ? response.items : response.data.items;
         } catch (error) {
           console.error(`Error fetching data for cluster ${clusterId}:`, error);
           return [];
@@ -129,7 +129,6 @@ const ProjectGameServerList = () => {
       try {
         setIsLoading(true);
         const results = await Promise.all(deployUnits.map(fetchClusterData));
-        console.log("results are",results)
         const ProjectGameServerList = []
         results.forEach((gameServers, index) => {
           const clusterId = deployUnits[index];
@@ -181,7 +180,7 @@ const ProjectGameServerList = () => {
   function getItems(items) {
     const kvs = []
     if (items == undefined) return []
-    
+
     for (let key in items) {
       if (key.includes("kubectl.kubernetes.io/last-applied-configuration")) {
         continue
@@ -287,7 +286,7 @@ function getResources(items) {
   const showDeleteModal = () => {
     setIsDeleteModalVisible(true);
   };
-  
+
   const showUpdateModal = () => {
     setIsUpdateModalVisible(true);
   };
@@ -309,13 +308,13 @@ function getResources(items) {
     setIsNetworkModal(false)
     setIsResourceModal(false)
   }
-  
+
   const handleOk = (value) => {
     handleCancel();
     setreload(!reload)
     setSelectedRowKeys([])
-    Notify.success(value)
-    
+    notify.success(value)
+
   };
 
   const refetch = () => {

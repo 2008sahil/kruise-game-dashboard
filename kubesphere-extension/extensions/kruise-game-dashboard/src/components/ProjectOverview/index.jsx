@@ -71,7 +71,7 @@ function ProjectOverview() {
                         labelSelector: `${config.projectLabel}=${projectId}`
                     }).toString();
                     const response = await axios.get(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/gameservers?${filterParams}`);
-                    return response.items;
+                    return (response.items !== undefined ? response.items : response.data.items);
                 } catch (error) {
                     console.error(`Error fetching data for cluster ${clusterId}:`, error);
                     return [];

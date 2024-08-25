@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useImperativeHandle, RefObject, forwardRef } from 'react';
-// import AceEditor, { IAceEditorProps } from 'react-ace';
 import { CodeEditor } from '@kubed/code-editor';
 import ReactFileReader from 'react-file-reader';
 import { Download, Upload } from '@kubed/icons';
@@ -7,7 +6,8 @@ import { useForceUpdate } from '@kubed/hooks';
 import { saveAs } from 'file-saver';
 import { isEmpty } from 'lodash';
 import {  ActionWrapper, Divider } from './style';
-import { Button,Notify,Select } from "@kube-design/components";
+import { Button,Select } from "@kube-design/components";
+import { notify } from '@kubed/components'
 import axios from 'axios';
 import yaml from 'js-yaml';
 
@@ -43,7 +43,7 @@ const Resource = () => {
   const fetchClusters = async () => {
     try {
       const response = await axios.get('/kapis/tenant.kubesphere.io/v1alpha2/clusters');
-      const clusterNames = response.items.map(cluster => ({
+      const clusterNames = (response.items || response.data.items || []).map(cluster => ({
         value: cluster.metadata.name,
         label: cluster.metadata.name
       }));
@@ -70,7 +70,7 @@ const Resource = () => {
 
   const handleSubmit = async () => {
     if (selectedValues.length === 0) {
-      Notify.error(t("Empty_DeployUnits"));
+      notify.error(t("Empty_DeployUnits"));
       return;
     }
 
@@ -84,36 +84,31 @@ const Resource = () => {
         let url;
         switch (kind) {
           case 'GameServerSet':
-            url = `clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/gameserversets`;
+            url = `/clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/gameserversets`;
             break;
           case 'GameServer':
-            url = `clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/gameservers`;
+            url = `/clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/gameservers`;
             break;
           case 'Deployment':
-            url = `clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/deployments`;
+            url = `/clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/deployments`;
             break;
           case 'StatefulSet':
-            url = `clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/statefulsets`;
+            url = `/clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/statefulsets`;
             break;
           case 'DaemonSet':
-            url = `clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/daemonsets`;
+            url = `/clusters/${cluster}/apis/${apiVersion}/namespaces/${namespace}/daemonsets`;
             break;
           default:
             throw new Error('Unsupported resource kind');
         }
 
-        return axios.post(url, manifest, {
-          headers: {
-            'Content-Type': 'application/yaml',
-          },
-        });
+        return axios.post(url, manifest);
       });
 
       await Promise.all(requests);
-      Notify.success('Resource created successfully in all selected clusters');
+      notify.success('Resource created successfully in all selected clusters');
     } catch (error) {
       console.error('Error creating resource:', error);
-      Notify.error(t("Error_Creating_Resource"));
     } finally {
       setloading(false);
     }
@@ -126,7 +121,7 @@ const Resource = () => {
           <ReactFileReader fileTypes={['.yaml']} handleFiles={handleUpload}>
             <Upload fill="#fff" color="#fff" size={20} />
           </ReactFileReader>
-        
+
          <Divider>|</Divider>
         <Download fill="#fff" color="#fff" size={20} onClick={handleDownload} />
       </ActionWrapper>
@@ -137,25 +132,23 @@ const Resource = () => {
   return (
     <div>
       <div style={{marginBottom:"10px"}}>
-      <Select 
-        name="select-multi" 
-        options={clusterOptions} 
-        onChange={handleSelect} 
-        multi 
-        value={selectedValues} 
+      <Select
+        name="select-multi"
+        options={clusterOptions}
+        onChange={handleSelect}
+        multi
+        value={selectedValues}
         placeholder={("Select_DeployUnits")}
         disabled={loading}
       />
         </div>
-    {/* <EditorWrapper> */}
         <CodeEditor
           // @ts-ignore
           onChange={handleChange}
           value={_value}
-          
+
         />
         {renderActions()}
-      {/* </EditorWrapper> */}
       <div style={{marginTop:"20px",display:"flex",justifyContent:"center"}}>
         <Button type="primary" loading={loading} onClick={handleSubmit}>
             Submit

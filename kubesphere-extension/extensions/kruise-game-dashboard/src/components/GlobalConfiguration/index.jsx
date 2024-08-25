@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Select, Button, Notify } from "@kube-design/components";
-import { Text, Input, Container } from '@kubed/components';
+import { Select, Button } from "@kube-design/components";
+import { Text, Input, Container,notify } from '@kubed/components';
 import styled from 'styled-components';
 import axios from "axios";
 
@@ -47,7 +47,7 @@ function GlobalConfiguration(props) {
   const fetchClusters = async () => {
     try {
       const response = await axios.get('/kapis/tenant.kubesphere.io/v1alpha2/clusters');
-      const clusterNames = response.items.map(cluster => ({
+      const clusterNames = (response.items !== undefined ? response.items : response.data.items).map(cluster => ({
         value: cluster.metadata.name,
         label: cluster.metadata.name
       }));
@@ -64,9 +64,9 @@ function GlobalConfiguration(props) {
         const configData = JSON.parse(storedConfig);
         setSelectedValues(JSON.parse(configData.deployUnits));
         setinputvalue(configData.projectLabel);
-      } 
+      }
       else{
-        const response = await axios.get('clusters/host/api/v1/namespaces/default/configmaps/configset');
+        const response = await axios.get('/clusters/host/api/v1/namespaces/default/configmaps/configset');
         setSelectedValues(JSON.parse(response.data.deployUnits))
         setinputvalue(response.data.projectLabel)
         // Save config data to local storage
@@ -84,10 +84,10 @@ function GlobalConfiguration(props) {
 
   const handleClick=async ()=>{
     if(!inputvalue.trim()){
-      return Notify.warning(t('Empty_Project_label'))
+      return notify.warning(t('Empty_Project_label'))
     }
     if(selectedValues.length === 0){
-      return Notify.warning(t('Select_One_DeployUnit'))
+      return notify.warning(t('Select_One_DeployUnit'))
     }
     setloading(true)
     try{
@@ -96,27 +96,27 @@ function GlobalConfiguration(props) {
         kind: 'ConfigMap',
         metadata: {
           name: 'configset',
-          namespace: 'default', 
+          namespace: 'default',
         },
         data: {
-          'projectLabel': inputvalue, 
-          'deployUnits': JSON.stringify(selectedValues) 
+          'projectLabel': inputvalue,
+          'deployUnits': JSON.stringify(selectedValues)
         },
       };
       if(config===true){
         try{
           await axios.put('/clusters/host/api/v1/namespaces/default/configmaps/configset', configMap)
-          Notify.success(t('Dashboard_Config_Updated'))
+          notify.success(t('Dashboard_Config_Updated'))
 
         }
         catch(error){
           await axios.post('/clusters/host/api/v1/namespaces/default/configmaps', configMap)
-          Notify.success(t('Dashboard_Config_Created'))
+          notify.success(t('Dashboard_Config_Created'))
         }
       }
       else{
         await axios.post('/clusters/host/api/v1/namespaces/default/configmaps', configMap)
-        Notify.success(t('Dashboard_Config_Created'))
+        notify.success(t('Dashboard_Config_Created'))
       }
       // Save config data to local storage
       const configData = {
@@ -136,19 +136,19 @@ function GlobalConfiguration(props) {
 },[])
 
   return (
-    
+
     <StyledOuterContainer>
     <Container>
       <StyledText variant="h3">{t("Project_Label_Key")}</StyledText>
-      <StyledInput value ={inputvalue} onChange={handleInputChange} placeholder={t("Select_Project_label")} disabled={loading} />   
+      <StyledInput value ={inputvalue} onChange={handleInputChange} placeholder={t("Select_Project_label")} disabled={loading} />
       <StyledText variant="h3">{t("Deploy_Units")}</StyledText>
-      <StyledSelect 
-        name="select-multi" 
-        options={clusterOptions} 
-        onChange={handleChange} 
-        multi 
+      <StyledSelect
+        name="select-multi"
+        options={clusterOptions}
+        onChange={handleChange}
+        multi
         searchable
-        value={selectedValues} 
+        value={selectedValues}
         placeholder={('name')}
         disabled={loading}
       />

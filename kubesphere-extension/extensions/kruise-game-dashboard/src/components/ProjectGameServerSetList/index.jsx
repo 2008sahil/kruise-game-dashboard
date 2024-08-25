@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, FilterInput, Menu, MenuItem, MenuLabel, Dropdown, Field,Banner } from '@kubed/components';
+import { Button, FilterInput, Menu, MenuItem, MenuLabel, Dropdown, Field,Banner, notify } from '@kubed/components';
 import { Refresh, Cogwheel, Eye, EyeClosed, Trash, Pen } from "@kubed/icons";
-import { Table, Pagination, Select, Notify } from "@kube-design/components";
+import { Table, Pagination, Select } from "@kube-design/components";
 import {  useParams } from 'react-router-dom';
 import { Avatar, Icon, } from "@ks-console/shared";
 import axios from 'axios';
@@ -15,10 +15,10 @@ const PAGINATION_OPTIONS = [5, 10, 50];
 const ProjectGameServerSetList = () => {
 
   const COLUMNS = [
-    { title: t('name'), dataIndex: 'Name', sorter: true, canHide: true, isVisible: true,render: (value, record) => (  <Field    label={record.namespace || "-"}  value={record.Name}  />), },
+    { title: t('name'), dataIndex: 'Name',  canHide: true, isVisible: true,render: (value, record) => (  <Field    label={record.namespace || "-"}  value={record.Name}  />), },
     { title: t('deployUnit'), dataIndex: 'DeployUnit', searchable: true, canHide: true, isVisible: true },
-    { title: t('replicas'), dataIndex: 'replicas', sorter: true, canHide: true, isVisible: true },
-    { title: t('gsStatus'), dataIndex: 'gsStatus', sorter: true, canHide: true, isVisible: true, render: (value, record) => (<>  <Field value={value[6] + "/" + value[0]}/>  </>),},
+    { title: t('replicas'), dataIndex: 'replicas',  canHide: true, isVisible: true },
+    { title: t('gsStatus'), dataIndex: 'gsStatus',  canHide: true, isVisible: true, render: (value, record) => (<>  <Field value={value[6] + "/" + value[0]}/>  </>),},
     { title: t('maintainingReplicas'), dataIndex: 'maintainingReplicas', isVisible: true,canHide: true },
     { title: t('waitToBeDeletedReplicas'), dataIndex: 'waitToBeDeletedReplicas', isVisible: true ,canHide: true},
     { title: t('templateImages'), dataIndex: 'templateImages', isVisible: false,canHide: true, render: (value, record) => (<>{value?.map((item, index) => {return (<Field key={index} value={item[0] + " -> " + item[1]}/>)})}</>), },
@@ -42,7 +42,7 @@ const ProjectGameServerSetList = () => {
       </>
   )}
   ];
-  
+
   const [filter, setFilter] = useState([]);
   const [config, setConfig] = useState({ deployUnits: [], projectLabel: "" });
   const [pagination, setPagination] = useState({ page: 1, total: 0, limit: 5 });
@@ -104,7 +104,7 @@ const ProjectGameServerSetList = () => {
       isMounted = false;
     };
   }, []);
-  
+
   useEffect(() => {
     let isMounted = true;
     const fetchGameServerSets = async () => {
@@ -113,8 +113,8 @@ const ProjectGameServerSetList = () => {
           const filterParams = new URLSearchParams({
             labelSelector: `${config.projectLabel}=${projectId}`
           }).toString();
-          const response = await axios.get(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/gameserversets?${filterParams}`)
-          return response.items;
+          const response = await axios.get(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/gameserversets?${filterParams}`);
+          return (response.items !== undefined ? response.items : response.data.items);
         } catch (error) {
           console.error(`Error fetching data for cluster ${clusterId}:`, error);
           return [];
@@ -176,7 +176,7 @@ const ProjectGameServerSetList = () => {
   function getItems(items) {
     const kvs = []
     if (items == undefined) return []
-    
+
     for (let key in items) {
       if (key.includes("kubectl.kubernetes.io/last-applied-configuration")) {
         continue
@@ -189,7 +189,7 @@ const ProjectGameServerSetList = () => {
   function getResources(items) {
     const kvs = []
     if (items == undefined) return []
-    
+
     for (let i = 0; i < items.length; i++) {
       let cpuRequest = items[i].resources?.requests?.cpu || '';
       let memRequest = items[i].resources?.requests?.memory || '';
@@ -278,14 +278,14 @@ const ProjectGameServerSetList = () => {
     setIsDeleteModalVisible(false);
     setIsRelicaModalVisible(false);
   }
-  
+
   const handleOk = (value) => {
     setIsUpdateModalVisible(false);
     setIsDeleteModalVisible(false);
     setIsRelicaModalVisible(false);
     setreload(!reload)
     setSelectedRowKeys([])
-    Notify.success(value)
+    notify.success(value)
   };
 
   const refetch = () => {
