@@ -96,7 +96,7 @@ const ProjectGameServerList = () => {
           }
         }
       } catch (error) {
-        console.error('Error fetching config:', error);
+        notify.error('Error fetching config:', error);
       } finally {
         if (isMounted) {
           setIsLoading(false);
@@ -121,7 +121,7 @@ const ProjectGameServerList = () => {
           const response = await axios.get(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/gameservers?${filterParams}`)
           return response.items !== undefined ? response.items : response.data.items;
         } catch (error) {
-          console.error(`Error fetching data for cluster ${clusterId}:`, error);
+          notify.error(`Error fetching data for cluster ${clusterId}:`, error);
           return [];
         }
       };

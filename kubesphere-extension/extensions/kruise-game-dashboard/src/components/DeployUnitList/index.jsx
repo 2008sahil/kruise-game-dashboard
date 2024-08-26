@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Pagination, Select } from "@kube-design/components";
-import { Banner } from '@kubed/components';
+import { Banner ,notify} from '@kubed/components';
 import { Icon } from "@ks-console/shared";
 
 const DeployUnitList=(props)=> {
@@ -33,7 +33,7 @@ const DeployUnitList=(props)=> {
         localStorage.setItem('config', JSON.stringify(configData));
       }
     } catch (error) {
-        console.error('Error fetching config:', error);
+        notify.error('Error fetching config:', error);
         setIsLoading(false)
     }
     };
@@ -57,7 +57,7 @@ const DeployUnitList=(props)=> {
           total: allData.length,
         }));
       } catch (error) {
-        Notify.error(t("Error_fetching_Deployunit"))
+        notify.error(t("Error_fetching_Deployunit"))
         console.error('Error fetching deploy units data:', error);
       } finally {
         setIsLoading(false);

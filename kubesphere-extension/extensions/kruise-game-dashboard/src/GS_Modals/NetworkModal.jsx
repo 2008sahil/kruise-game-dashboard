@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Modal, Input, Text, Container, Button,Select } from '@kubed/components'
+import { Modal, Input, Text, Container, Button,Select ,notify} from '@kubed/components'
 import { Error } from '@kubed/icons'
 import axios from 'axios';
 
 export const NetworkModal = ({visible, onCancel, onOk, resources,setvisible,loading }) => {
     const [fieldValue, setFieldValue] = useState("");
-    
+
     const handleNeworkRequest = async () => {
         const patchData = {
             spec: {
@@ -24,13 +24,13 @@ export const NetworkModal = ({visible, onCancel, onOk, resources,setvisible,load
                     }
                 );
             } catch (error) {
-                console.error(`Error fetching data for cluster ${clusterId}:`, error);       
+                // notify.error(error);
               }
         }
         try {
             await Promise.all(resources.map(resource => handlePatch(resource.Name, resource.DeployUnit,resource.ns)));
           } catch (error) {
-            console.error('Error fetching config:', error);
+            notify.error(error);
           }
     };
 
@@ -58,7 +58,7 @@ export const NetworkModal = ({visible, onCancel, onOk, resources,setvisible,load
           </Button>
         </div>
       )
-    
+
   return (
     <div>
         <Modal
@@ -67,10 +67,10 @@ export const NetworkModal = ({visible, onCancel, onOk, resources,setvisible,load
         width={500}
         closable={false}
         footer={footer}
-        destroyOnClose={true} 
-        maskClosable={false} 
-        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }} 
-        aria-hidden={!visible} 
+        destroyOnClose={true}
+        maskClosable={false}
+        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }}
+        aria-hidden={!visible}
         >
             <Select placeholder="Set Network..." style={{ width: "100%" }} options={[{ value: true,label:"True" },{ value:false,label: "False" } ]}  onChange={(data) => setFieldValue(data)}/>
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Input, Text, Container, Button } from '@kubed/components'
+import { Modal, Input, Text, Container, Button, notify } from '@kubed/components'
 import { Error } from '@kubed/icons'
 import axios from 'axios';
 
@@ -13,13 +13,12 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
       try {
         await axios.delete(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/namespaces/${ns}/${gss===true?"gameserversets":"gameservers"}/${resource_name}`)
       } catch (error) {
-        console.error(`Error fetching data for cluster ${clusterId}:`, error);
       }
     };
     try {
       await Promise.all(resources.map(resource => DeleteResource(resource.Name, resource.DeployUnit,resource.ns)));
     } catch (error) {
-      console.error('Error fetching config:', error);
+      notify.error(error);
     }
   };
 

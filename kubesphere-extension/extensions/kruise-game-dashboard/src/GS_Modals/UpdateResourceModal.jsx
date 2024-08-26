@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Modal, Input, Text, Container, Button, Checkbox } from '@kubed/components'
+import { Modal, Input, Text, Container, Button, Checkbox,notify } from '@kubed/components'
 import { Update } from '@kubed/icons'
 import axios from 'axios';
 import { Select } from '@kube-design/components'
@@ -97,13 +97,12 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
                 await axios.patch(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/namespaces/${ns}/gameservers/${gss}`, patchData, { headers: { 'Content-Type': 'application/merge-patch+json' } });
 
             } catch (error) {
-                console.error(`Error fetching data for cluster ${clusterId}:`, error);
             }
         }
         try {
             await Promise.all(resources.map(resource => HandleUpdate(resource.Name, resource.DeployUnit, resource.ns, resource.currState)));
         } catch (error) {
-            console.error('Error fetching config:', error);
+            notify.error(error);
         }
 
     }
@@ -114,13 +113,12 @@ export const UpdateResourceModal = ({ visible, onCancel, onOk, resources, setvis
 
                 await axios.delete(`/clusters/${clusterId}/api/v1/namespaces/${ns}/pods/${gs}`)
             } catch (error) {
-                console.error(`Error fetching data for cluster ${clusterId}:`, error);
             }
         };
         try {
             await Promise.all(resources.map(resource => HandleDelete(resource.Name, resource.DeployUnit, resource.ns)));
         } catch (error) {
-            console.error('Error fetching config:', error);
+            notify.error( error);
         }
 
     }

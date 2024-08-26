@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Modal, Input, Text, Container, Button,AutoComplete } from '@kubed/components'
+import { Modal, Input, Text, notify, Button,AutoComplete } from '@kubed/components'
 import { Error } from '@kubed/icons'
 import axios from 'axios';
 
@@ -24,13 +24,13 @@ export const OpsStateModal = ({visible, onCancel, onOk, resources,setvisible,loa
                     }
                 );
             } catch (error) {
-                console.error(`Error fetching data for cluster ${clusterId}:`, error);       
+                // console.error(`Error fetching data for cluster ${clusterId}:`, error);
               }
         }
         try {
             await Promise.all(resources.map(resource => handlePatch(resource.Name, resource.DeployUnit,resource.ns)));
           } catch (error) {
-            console.error('Error fetching config:', error);
+            notify.error(error);
           }
     };
 
@@ -58,7 +58,7 @@ export const OpsStateModal = ({visible, onCancel, onOk, resources,setvisible,loa
           </Button>
         </div>
       )
-    
+
   return (
     <div>
         <Modal
@@ -67,10 +67,10 @@ export const OpsStateModal = ({visible, onCancel, onOk, resources,setvisible,loa
         width={500}
         closable={false}
         footer={footer}
-        destroyOnClose={true} 
-        maskClosable={false} 
-        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }} 
-        aria-hidden={!visible} 
+        destroyOnClose={true}
+        maskClosable={false}
+        bodyStyle={{ pointerEvents: visible ? 'auto' : 'none' }}
+        aria-hidden={!visible}
         >
             <AutoComplete placeholder="Set opsState..." style={{ width: "100%" }} options={[{ value: "WaitToBeDeleted" },{ value:"None" },{ value: "Allocated" },{ value: "Maintaining" },{ value: "Kill" } ]}  onChange={(data) => setFieldValue(data)}/>
         </Modal>

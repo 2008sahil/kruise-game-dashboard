@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Pagination, Select } from "@kube-design/components";
-import { Banner } from '@kubed/components';
+import { Banner , notify} from '@kubed/components';
 import { Icon } from "@ks-console/shared";
 
 const ProjectList =() => {
@@ -33,7 +33,7 @@ const ProjectList =() => {
           localStorage.setItem('config', JSON.stringify(configData));
         }
       } catch (error) {
-        console.error('Error fetching config:', error);
+        notify.error('Error fetching config:', error);
       }
       setIsLoading(false)
     };
@@ -50,7 +50,7 @@ const ProjectList =() => {
           const response = await axios.get(`/clusters/${clusterId}/apis/game.kruise.io/v1alpha1/gameserversets`);
           return (response.items !== undefined ? response.items : response.data.items);
         } catch (error) {
-          console.error(`Error fetching data for cluster ${clusterId}:`, error);
+          notify.error(`Error fetching data for cluster ${clusterId}:`, error);
           return [];
         }
       };

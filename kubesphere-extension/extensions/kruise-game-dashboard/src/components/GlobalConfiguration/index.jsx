@@ -53,7 +53,7 @@ function GlobalConfiguration(props) {
       }));
       setClusterOptions(clusterNames);
     } catch (error) {
-      console.error('Error fetching clusters:', error);
+      notify.error('Error fetching clusters:', error);
     }
   };
   const fetchConfig = async () => {
@@ -78,6 +78,7 @@ function GlobalConfiguration(props) {
       }
       setconfig(true)
     } catch (error) {
+      notify.error('Error fetching config:', error)
     }
     setloading(false)
   };
@@ -125,7 +126,7 @@ function GlobalConfiguration(props) {
       };
       localStorage.setItem('config', JSON.stringify(configData));
     } catch (error) {
-      console.error('Error creating ConfigMap:', error);
+      notify.error('Error creating ConfigMap:', error);
     }
     setloading(false)
   }

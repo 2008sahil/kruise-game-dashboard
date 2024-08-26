@@ -109,6 +109,7 @@ const Resource = () => {
       notify.success('Resource created successfully in all selected clusters');
     } catch (error) {
       console.error('Error creating resource:', error);
+      notify.error('Error creating resource:', error);
     } finally {
       setloading(false);
     }
