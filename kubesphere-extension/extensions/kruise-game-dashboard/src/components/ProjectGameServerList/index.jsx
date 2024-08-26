@@ -27,7 +27,7 @@ const ProjectGameServerList = () => {
     { title: t('DP'), dataIndex: 'DP', isVisible: false,canHide: true, },
     { title: t('labels'), dataIndex: 'labels', isVisible: false,canHide: true,render: (value, record) => (<>  {value?.map((item, index) => {  return (  <Field key={index}  value={item.key + "=" + item.value}  />  )  })}  </>), },
     { title: t('UP'), dataIndex: 'UP', isVisible: false,canHide: true },
-    { title: t('templateResources'), dataIndex: 'templateResources', isVisible: false,canHide: true,render: (value, record) => (<>{value?.map((item, index) => {return (<Field  key={index}  value={item.key + " -> " + item.value}  />  )  })}  </>), },
+    { title: t('Resources'), dataIndex: 'Resources', isVisible: false,canHide: true,render: (value, record) => (<>{value?.map((item, index) => {return (<Field  key={index}  value={item.key + " -> " + item.value}  />  )  })}  </>), },
     { title: t('annotations'), dataIndex: 'annotations', isVisible: false,canHide: true ,render: (value, record) => (  <>{value?.map((item, index) => { return ( <Field   key={index}   value={item.key + "=" + item.value}/>) })}  </>),},
     { title: t('creationTimestamp'), dataIndex: 'creationTimestamp', isVisible: false,canHide: true },
     { title: t('actions'), dataIndex: 'more', isVisible: true, width: 58, render: (value, record) => (
@@ -147,7 +147,7 @@ const ProjectGameServerList = () => {
               UP: item.status.updatePriority,
               images: (getImages(item.status.podStatus.containerStatuses)),
               conditions: Object.values(getConditions(item.status.conditions)),
-              templateResources:(getResources(item.spec.containers)),
+              Resources:(getResources(item.spec.containers)),
               DeployUnit: clusterId,
               currState: item,
             };

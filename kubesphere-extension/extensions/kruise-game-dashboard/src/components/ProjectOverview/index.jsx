@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Badge, Banner, Col, Entity, Field, Row,LoadingOverlay } from '@kubed/components';
+import { Badge, Banner, Col, Entity, Field, Row } from '@kubed/components';
 import { Icon } from "@ks-console/shared";
 
 function ProjectOverview() {
-    const [gameServers, setGameServers] = useState([]);
+    const [gameServersCount, setGameServersCount] = useState(0);
     const [config, setConfig] = useState({ deployUnits: [], projectLabel: "" });
     const { projectId } = useParams();
-    const [isLoading, setIsLoading] = useState(true);
     const [deployUnits, setDeployUnits] = useState([]);
 
     const [counters, setCounters] = useState({
@@ -29,7 +28,6 @@ function ProjectOverview() {
         let isMounted = true;
 
         const fetchConfig = async () => {
-            setIsLoading(true);
             try {
                 const storedConfig = localStorage.getItem('config');
                 if (storedConfig) {
@@ -49,9 +47,7 @@ function ProjectOverview() {
             } catch (error) {
                 console.error('Error fetching config:', error);
             } finally {
-                if (isMounted) {
-                    setIsLoading(false);
-                }
+                // //////////
             }
         };
         fetchConfig();
@@ -79,7 +75,6 @@ function ProjectOverview() {
             };
 
             try {
-                setIsLoading(true);
                 const results = await Promise.all(deployUnits.map(fetchClusterData));
                 let updatedCounters = {
                     gsCreating: 0,
@@ -94,6 +89,7 @@ function ProjectOverview() {
                     gsWaitToBeDeleted: 0,
                     gsMaintaining: 0,
                 };
+                setGameServersCount(results.length)
 
                 results.forEach(gameServers => {
                     gameServers.forEach(item => {
@@ -116,9 +112,7 @@ function ProjectOverview() {
                     // setGameServers(results.flat());
                 }
             } finally {
-                if (isMounted) {
-                    setIsLoading(false);
-                }
+               ///////
             }
         };
 
@@ -134,7 +128,6 @@ function ProjectOverview() {
     return (
         <>
             <Row columns={20}>
-            <LoadingOverlay visible={isLoading} />
                 <Col span={16}>
                     <Banner
                         icon={<Icon name="application" size={20} />}
@@ -150,7 +143,7 @@ function ProjectOverview() {
                         <Col span={4}>
                             <Entity bordered={false} style={{ background: 'white', borderRadius: '10px' }}>
                                 <Badge color="default"></Badge>
-                                <Field label="Total" value={gameServers.length} style={{ fontSize: 'larger', fontWeight: 'bold' }} />
+                                <Field label="Total" value={gameServersCount} style={{ fontSize: 'larger', fontWeight: 'bold' }} />
                             </Entity>
                         </Col>
                         <Col span={4}>
