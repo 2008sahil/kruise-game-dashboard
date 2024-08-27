@@ -5,7 +5,6 @@ import { Badge, Banner, Col, Entity, Field, Row } from '@kubed/components';
 import { Icon } from "@ks-console/shared";
 
 function ProjectOverview() {
-    const [gameServersCount, setGameServersCount] = useState(0);
     const [config, setConfig] = useState({ deployUnits: [], projectLabel: "" });
     const { projectId } = useParams();
     const [deployUnits, setDeployUnits] = useState([]);
@@ -22,6 +21,7 @@ function ProjectOverview() {
         gsAllocated: 0,
         gsWaitToBeDeleted: 0,
         gsMaintaining: 0,
+        totalgameservers:0,
     });
 
     useEffect(() => {
@@ -88,11 +88,11 @@ function ProjectOverview() {
                     gsAllocated: 0,
                     gsWaitToBeDeleted: 0,
                     gsMaintaining: 0,
+                    totalgameservers: 0,
                 };
-                setGameServersCount(results.length)
-
                 results.forEach(gameServers => {
                     gameServers.forEach(item => {
+                        updatedCounters.totalgameservers+=1;
                         if (item.status.currentState === "Creating") updatedCounters.gsCreating += 1;
                         if (item.status.currentState === "Updating") updatedCounters.gsUpdating += 1;
                         if (item.status.currentState === "Deleting") updatedCounters.gsDeleting += 1;
@@ -106,6 +106,7 @@ function ProjectOverview() {
                         if (item.spec.opsState === "WaitToBeDeleted") updatedCounters.gsWaitToBeDeleted += 1;
                     });
                 });
+
 
                 if (isMounted) {
                     setCounters(updatedCounters);
@@ -143,7 +144,7 @@ function ProjectOverview() {
                         <Col span={4}>
                             <Entity bordered={false} style={{ background: 'white', borderRadius: '10px' }}>
                                 <Badge color="default"></Badge>
-                                <Field label="Total" value={gameServersCount} style={{ fontSize: 'larger', fontWeight: 'bold' }} />
+                                <Field label="Total" value={counters.totalgameservers} style={{ fontSize: 'larger', fontWeight: 'bold' }} />
                             </Entity>
                         </Col>
                         <Col span={4}>

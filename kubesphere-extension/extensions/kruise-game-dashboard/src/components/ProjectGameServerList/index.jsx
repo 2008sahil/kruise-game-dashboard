@@ -11,6 +11,8 @@ import { NetworkModal } from '../../GS_Modals/NetworkModal.jsx';
 import { DeleteModal } from '../../GSS_Modals/DeleteModal.jsx';
 import { UpdateModal } from '../../GS_Modals/UpdateModal.jsx';
 import { UpdateResourceModal } from '../../GS_Modals/UpdateResourceModal.jsx';
+import { UPModal } from '../../GS_Modals/UPModal.jsx';
+import { DPModal } from '../../GS_Modals/DPModal.jsx';
 
 const PAGINATION_OPTIONS = [5, 10, 50];
 
@@ -62,6 +64,8 @@ const ProjectGameServerList = () => {
   const [IsResourceModal, setIsResourceModal] = useState(false);
   const [IsOpsStateModal, setIsOpsStateModal] = useState(false);
   const [IsNetworkModal, setIsNetworkModal] = useState(false);
+  const [IsUPModal, setUPModal] = useState(false);
+  const [IsDPModal, setDPModal] = useState(false);
   const [resources,setresources]=useState([]);
 
   const { projectId } = useParams();
@@ -300,6 +304,12 @@ function getResources(items) {
   const showResourceModal = () => {
     setIsResourceModal(true);
   };
+  const showUPModal = () => {
+    setUPModal(true);
+  };
+  const showDPModal = () => {
+    setDPModal(true);
+  };
 
   const handleCancel = () => {
     setIsUpdateModalVisible(false);
@@ -307,6 +317,8 @@ function getResources(items) {
     setIsOpsStateModal(false)
     setIsNetworkModal(false)
     setIsResourceModal(false)
+    setUPModal(false)
+    setDPModal(false)
   }
 
   const handleOk = (value) => {
@@ -456,6 +468,26 @@ function getResources(items) {
     >
       update resources
     </Button>
+    <Button
+      variant="filled"
+      color="warning"
+      onClick={() => {
+        setresources(getResourceNames(allData, selectedRowKeys));
+        showUPModal()
+      }}
+    >
+      update UP
+    </Button>
+    <Button
+      variant="filled"
+      color="error"
+      onClick={() => {
+        setresources(getResourceNames(allData, selectedRowKeys));
+        showDPModal()
+      }}
+    >
+      update DP
+    </Button>
     </>
   );
 
@@ -466,6 +498,8 @@ function getResources(items) {
       <OpsStateModal visible={IsOpsStateModal} setvisible={setIsOpsStateModal} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources} />
       <NetworkModal visible={IsNetworkModal} setvisible={setIsNetworkModal} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources} />
       <UpdateResourceModal visible={IsResourceModal} setvisible={setIsResourceModal} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources} />
+      <UPModal visible={IsUPModal} setvisible={setUPModal} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources} />
+      <DPModal visible={IsDPModal} setvisible={setDPModal} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources} />
       <Banner
         className="mb12"
         icon={<Icon name="appcenter" size={40}/>}
@@ -535,6 +569,3 @@ function getResources(items) {
 };
 
 export default ProjectGameServerList;
-
-
-
