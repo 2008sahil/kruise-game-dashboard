@@ -53,19 +53,20 @@ export const UpdateModal = ({ visible, onCancel, onOk, resources,setvisible,load
       }
     };
     try {
+      loading(true)
+      setvisible(false)
       await Promise.all(resources.map(resource => fetchClusterData(resource.Name, resource.DeployUnit,resource.ns,resource.currState)));
+      setInputValue("")
+      setSelectedContainer("")
+      onOk(t("Resource Image Updated"));
     } catch (error) {
       notify.error(error);
+      loading(false);
     }
   };
 
   const handleClick = async() => {
-    setvisible(false)
-    loading(true)
     await fetchGameServerSets();
-    setInputValue("")
-    setSelectedContainer("")
-    onOk(t("Resource Image Updated"));
   };
 
   const title = (

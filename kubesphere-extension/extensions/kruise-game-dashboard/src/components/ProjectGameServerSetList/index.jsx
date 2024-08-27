@@ -9,6 +9,7 @@ import { ToolbarWrapper, ToolbarInner, BatchActions } from './style.jsx';
 import { DeleteModal } from '../../GSS_Modals/DeleteModal.jsx';
 import { UpdateModal } from '../../GSS_Modals/UpdateModal.jsx';
 import { UpdateReplicaModal } from '../../GSS_Modals/UpdateReplicaModal.jsx';
+import { EditModal } from '../../GSS_Modals/EditModal.jsx';
 
 const PAGINATION_OPTIONS = [5, 10, 50];
 
@@ -33,6 +34,7 @@ const ProjectGameServerSetList = () => {
                   <MenuItem icon={<Pen/>} onClick={()=>{setresources([{Name:record.Name,DeployUnit:record.DeployUnit,ns:record.namespace,currState:record.currState}]),showReplicaModal()}}>Update replicas</MenuItem>
                   <MenuItem icon={<Pen/>} onClick={()=>{setresources([{Name:record.Name,DeployUnit:record.DeployUnit,ns:record.namespace,currState:record.currState}]),showUpdateModal()}}>Update image</MenuItem>
                   <MenuItem icon={<Trash/>} onClick={()=>{setresources([{Name:record.Name,DeployUnit:record.DeployUnit,ns:record.namespace,currState:record.currState}]),showDeleteModal()}}>Delete</MenuItem>
+                  <MenuItem icon={<Pen/>} onClick={()=>{setresources([{Name:record.Name,DeployUnit:record.DeployUnit,ns:record.namespace,currState:record.currState}]),showEditModal()}}>Edit YAML</MenuItem>
               </Menu>
           }>
               <Button variant="text" radius="lg">
@@ -57,6 +59,7 @@ const ProjectGameServerSetList = () => {
   const [IsDeleteModalVisible, setIsDeleteModalVisible] = useState(false);
   const [IsUpdateModalVisible, setIsUpdateModalVisible] = useState(false);
   const [IsRelicaModalVisible, setIsRelicaModalVisible] = useState(false);
+  const [IsEditModalVisible, setIsEditModalVisible] = useState(false);
   const [resources,setresources]=useState([]);
 
   const { projectId } = useParams();
@@ -273,16 +276,19 @@ const ProjectGameServerSetList = () => {
     setIsRelicaModalVisible(true);
   };
 
+  const showEditModal = () => {
+    setIsEditModalVisible(true);
+  };
+
   const handleCancel = () => {
     setIsUpdateModalVisible(false);
     setIsDeleteModalVisible(false);
     setIsRelicaModalVisible(false);
+    setIsEditModalVisible(false);
   }
 
   const handleOk = (value) => {
-    setIsUpdateModalVisible(false);
-    setIsDeleteModalVisible(false);
-    setIsRelicaModalVisible(false);
+    handleCancel()
     setreload(!reload)
     setSelectedRowKeys([])
     notify.success(value)
@@ -415,6 +421,7 @@ const ProjectGameServerSetList = () => {
       <DeleteModal visible={IsDeleteModalVisible} setvisible={setIsDeleteModalVisible} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources} gss={true}/>
       <UpdateModal visible={IsUpdateModalVisible} setvisible={setIsUpdateModalVisible} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources}/>
       <UpdateReplicaModal visible={IsRelicaModalVisible} setvisible={setIsRelicaModalVisible} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources}/>
+      <EditModal visible={IsEditModalVisible} setvisible={setIsEditModalVisible} loading={setIsLoading} onCancel={handleCancel} onOk={handleOk} resources={resources}/>
       <Banner
         className="mb12"
         icon={<Icon name="appcenter" size={40}/>}

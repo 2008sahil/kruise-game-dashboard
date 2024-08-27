@@ -65,7 +65,6 @@ const Resource = () => {
 
   const handleSelect=(Value)=>{
     setSelectedValues(Value);
-
   }
 
   const handleSubmit = async () => {

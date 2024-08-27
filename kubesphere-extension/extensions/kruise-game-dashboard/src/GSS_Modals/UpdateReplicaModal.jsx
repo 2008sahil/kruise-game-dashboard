@@ -20,18 +20,19 @@ export const UpdateReplicaModal = ({ visible, onCancel, onOk, resources,setvisib
       }
     };
     try {
+      loading(true)
+      setvisible(false)
       await Promise.all(resources.map(resource => fetchClusterData(resource.Name, resource.DeployUnit,resource.ns)));
+      setInputValue("")
+      onOk(t("Resource Replicas Updated"));
     } catch (error) {
+      loading(false)
       notify.error(error);
     }
   };
 
   const handleClick = async() => {
-    setvisible(false)
-    loading(true)
     await fetchGameServerSets();
-    setInputValue("")
-    onOk(t("Resource Replicas Updated"));
   };
 
   const title = (

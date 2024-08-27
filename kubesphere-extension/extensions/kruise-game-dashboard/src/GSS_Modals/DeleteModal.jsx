@@ -16,18 +16,19 @@ export const DeleteModal = ({ visible, onCancel, onOk, resources,setvisible,load
       }
     };
     try {
+      loading(true)
+      setvisible(false)
       await Promise.all(resources.map(resource => DeleteResource(resource.Name, resource.DeployUnit,resource.ns)));
+      setInputValue("")
+      onOk(t("Resource Deleted"));
     } catch (error) {
+      loading(false)
       notify.error(error);
     }
   };
 
   const handleClick = async() => {
-    setvisible(false)
-    loading(true)
     await DeleteResources();
-    setInputValue("")
-    onOk(t("Resource Deleted"));
   };
 
   const title = (

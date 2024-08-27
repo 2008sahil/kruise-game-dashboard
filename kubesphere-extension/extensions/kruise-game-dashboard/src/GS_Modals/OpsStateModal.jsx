@@ -28,17 +28,17 @@ export const OpsStateModal = ({visible, onCancel, onOk, resources,setvisible,loa
               }
         }
         try {
+            loading(true)
+            setvisible(false)
             await Promise.all(resources.map(resource => handlePatch(resource.Name, resource.DeployUnit,resource.ns)));
           } catch (error) {
             notify.error(error);
+            onOk(t("OpsState Updated"));
           }
     };
 
     const handleClick = async() => {
-        setvisible(false)
-        loading(true)
         await handlePatchRequest();
-        onOk(t("OpsState Updated"));
       };
 
     const title = (

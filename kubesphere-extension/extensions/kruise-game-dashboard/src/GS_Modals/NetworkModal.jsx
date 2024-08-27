@@ -28,17 +28,18 @@ export const NetworkModal = ({visible, onCancel, onOk, resources,setvisible,load
               }
         }
         try {
-            await Promise.all(resources.map(resource => handlePatch(resource.Name, resource.DeployUnit,resource.ns)));
-          } catch (error) {
-            notify.error(error);
+          loading(true)
+          setvisible(false)
+          await Promise.all(resources.map(resource => handlePatch(resource.Name, resource.DeployUnit,resource.ns)));
+          onOk(t("NetworkState Updated"));
+        } catch (error) {
+          notify.error(error);
+          loading(false)
           }
     };
 
     const handleClick = async() => {
-        setvisible(false)
-        loading(true)
         await handleNeworkRequest();
-        onOk(t("NetworkState Updated"));
       };
 
     const title = (

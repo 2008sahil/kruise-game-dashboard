@@ -29,18 +29,19 @@ export const UPModal = ({ visible, onCancel, onOk, resources,setvisible,loading 
           }
     }
     try {
-        await Promise.all(resources.map(resource => handlePatch(resource.Name, resource.DeployUnit,resource.ns)));
-      } catch (error) {
-        notify.error(error);
+      loading(true)
+      setvisible(false)
+      await Promise.all(resources.map(resource => handlePatch(resource.Name, resource.DeployUnit,resource.ns)));
+      setInputValue(0)
+      onOk(t("Resource UP Updated"));
+    } catch (error) {
+      notify.error(error);
+      loading(false)
       }
 };
 
   const handleClick = async() => {
-    setvisible(false)
-    loading(true)
     await handlePatchRequest();
-    setInputValue(0)
-    onOk(t("Resource UP Updated"));
   };
 
   const title = (
